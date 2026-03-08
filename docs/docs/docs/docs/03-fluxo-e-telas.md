@@ -177,7 +177,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 8. [ ] Tela Community (Ranking / Leaderboard)
+### 8. [x] Tela Community (Ranking / Leaderboard)
 
 **Rota:** `/community`
 
