@@ -119,7 +119,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 5. [ ] Tela Home (Dashboard)
+### 5. [x] Tela Home (Dashboard)
 
 **Rota:** `/home`
 

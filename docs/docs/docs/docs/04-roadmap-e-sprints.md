@@ -65,7 +65,7 @@ Este documento organiza o **planejamento de desenvolvimento** do Corrida Territo
 9. [ ] Criar modelo `RunModel` e dados mockados de corridas anteriores
 10. [ ] Implementar `MockRunService` (salvar e listar corridas localmente)
 11. [ ] Implementar tela de **Resumo da Corrida** com dados locais
-12. [ ] Implementar tela **Home** (dashboard) com cards de progresso (dados mockados)
+12. [x] Implementar tela **Home** (dashboard) com cards de progresso (dados mockados)
 
 ---
 
