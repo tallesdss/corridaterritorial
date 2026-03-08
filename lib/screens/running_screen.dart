@@ -44,7 +44,7 @@ class _RunningScreenState extends State<RunningScreen> {
             left: 16,
             child: Container(
               decoration: BoxDecoration(
-                color: AppColors.backgroundElevated.withOpacity(0.8),
+                color: AppColors.backgroundElevated.withValues(alpha: 0.8),
                 shape: BoxShape.circle,
               ),
               child: IconButton(
@@ -62,11 +62,11 @@ class _RunningScreenState extends State<RunningScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
               decoration: BoxDecoration(
-                color: AppColors.backgroundCard.withOpacity(0.95),
+                color: AppColors.backgroundCard.withValues(alpha: 0.95),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.18),
+                    color: Colors.black.withValues(alpha: 0.18),
                     blurRadius: 32,
                   ),
                 ],

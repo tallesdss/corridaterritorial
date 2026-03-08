@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/ranked_user_model.dart';
 import '../services/mock_ranking_service.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
 
 enum RankingFilter { territory, distance, achievements }
 
@@ -21,6 +20,7 @@ final rankingFutureProvider = FutureProvider<List<RankedUserModel>>((ref) async 
     case RankingFilter.achievements:
       return service.getRankingByAchievements();
   }
+  throw StateError('Unreachable');
 });
 
 class CommunityScreen extends ConsumerWidget {
@@ -32,15 +32,15 @@ class CommunityScreen extends ConsumerWidget {
     final rankingAsync = ref.watch(rankingFutureProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.backgroundPrimary,
       appBar: AppBar(
-        title: Text('Community', style: AppTextStyles.h2.copyWith(color: AppColors.textPrimary)),
+        title: Text('Community', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: AppColors.textPrimary)),
         backgroundColor: AppColors.backgroundSecondary,
         elevation: 0,
       ),
       body: Column(
         children: [
-          _buildFilterChips(ref, filter),
+          _buildFilterChips(context, ref, filter),
           Expanded(
             child: rankingAsync.when(
               data: (users) {
@@ -54,17 +54,17 @@ class CommunityScreen extends ConsumerWidget {
                   child: ListView(
                     padding: const EdgeInsets.all(16),
                     children: [
-                      if (users.length >= 3) _buildTop3(users.take(3).toList()),
+                      if (users.length >= 3) _buildTop3(context, users.take(3).toList()),
                       const SizedBox(height: 24),
-                      Text('Ranking Global', style: AppTextStyles.h3.copyWith(color: AppColors.textPrimary)),
+                      Text('Ranking Global', style: Theme.of(context).textTheme.titleLarge?.copyWith(color: AppColors.textPrimary)),
                       const SizedBox(height: 16),
-                      ...users.map((user) => _buildRankingItem(user, users.indexOf(user) + 1, filter)),
+                      ...users.map((user) => _buildRankingItem(context, user, users.indexOf(user) + 1, filter)),
                     ],
                   ),
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
-              error: (err, stack) => Center(child: Text('Erro ao carregar ranking', style: AppTextStyles.body.copyWith(color: AppColors.error))),
+              error: (err, stack) => Center(child: Text('Erro ao carregar ranking', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.error))),
             ),
           )
         ],
@@ -72,7 +72,7 @@ class CommunityScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildFilterChips(WidgetRef ref, RankingFilter currentFilter) {
+  Widget _buildFilterChips(BuildContext context, WidgetRef ref, RankingFilter currentFilter) {
     return Container(
       color: AppColors.backgroundSecondary,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -81,6 +81,7 @@ class CommunityScreen extends ConsumerWidget {
         child: Row(
           children: [
             _buildChip(
+              context,
               label: 'Territórios', 
               icon: Icons.map,
               isSelected: currentFilter == RankingFilter.territory,
@@ -88,6 +89,7 @@ class CommunityScreen extends ConsumerWidget {
             ),
             const SizedBox(width: 8),
             _buildChip(
+              context,
               label: 'Distância', 
               icon: Icons.directions_run,
               isSelected: currentFilter == RankingFilter.distance,
@@ -95,6 +97,7 @@ class CommunityScreen extends ConsumerWidget {
             ),
             const SizedBox(width: 8),
             _buildChip(
+              context,
               label: 'Conquistas', 
               icon: Icons.emoji_events,
               isSelected: currentFilter == RankingFilter.achievements,
@@ -106,13 +109,13 @@ class CommunityScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildChip({required String label, required IconData icon, required bool isSelected, required VoidCallback onTap}) {
+  Widget _buildChip(BuildContext context, {required String label, required IconData icon, required bool isSelected, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppColors.primary.withOpacity(0.2) : AppColors.surface,
+          color: isSelected ? AppColors.primary.withValues(alpha: 0.2) : AppColors.backgroundCard,
           border: Border.all(color: isSelected ? AppColors.primary : Colors.transparent),
           borderRadius: BorderRadius.circular(20),
         ),
@@ -122,7 +125,7 @@ class CommunityScreen extends ConsumerWidget {
             const SizedBox(width: 6),
             Text(
               label,
-              style: AppTextStyles.caption.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: isSelected ? AppColors.primary : AppColors.textSecondary,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
@@ -133,25 +136,31 @@ class CommunityScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTop3(List<RankedUserModel> top3) {
-    if (top3.length < 3) return const SizedBox();
+  Widget _buildTop3(BuildContext context, List<RankedUserModel> top3) {
+    if (top3.length < 3) {
+      return const SizedBox();
+    }
     
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        _buildPodiumItem(top3[1], 2, 80),
-        _buildPodiumItem(top3[0], 1, 100),
-        _buildPodiumItem(top3[2], 3, 70),
+        _buildPodiumItem(context, top3[1], 2, 80),
+        _buildPodiumItem(context, top3[0], 1, 100),
+        _buildPodiumItem(context, top3[2], 3, 70),
       ],
     );
   }
 
-  Widget _buildPodiumItem(RankedUserModel user, int position, double size) {
+  Widget _buildPodiumItem(BuildContext context, RankedUserModel user, int position, double size) {
     Color ringColor;
-    if (position == 1) ringColor = Colors.amber;
-    else if (position == 2) ringColor = Colors.grey[300]!;
-    else ringColor = Colors.orange[300]!;
+    if (position == 1) {
+      ringColor = Colors.amber;
+    } else if (position == 2) {
+      ringColor = Colors.grey[300]!;
+    } else {
+      ringColor = Colors.orange[300]!;
+    }
 
     return Column(
       children: [
@@ -165,7 +174,7 @@ class CommunityScreen extends ConsumerWidget {
               ),
               child: CircleAvatar(
                 radius: size / 2,
-                backgroundColor: AppColors.surface,
+                backgroundColor: AppColors.backgroundCard,
                 backgroundImage: user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
                 child: user.avatarUrl == null ? const Icon(Icons.person, color: AppColors.textSecondary, size: 40) : null,
               ),
@@ -186,7 +195,7 @@ class CommunityScreen extends ConsumerWidget {
         const SizedBox(height: 8),
         Text(
           user.name,
-          style: AppTextStyles.body.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -194,7 +203,7 @@ class CommunityScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRankingItem(RankedUserModel user, int position, RankingFilter filter) {
+  Widget _buildRankingItem(BuildContext context, RankedUserModel user, int position, RankingFilter filter) {
     String scoreText;
     switch (filter) {
       case RankingFilter.territory:
@@ -212,7 +221,7 @@ class CommunityScreen extends ConsumerWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: AppColors.backgroundCard,
         borderRadius: BorderRadius.circular(12),
         border: user.name == 'Eu (Você)' ? Border.all(color: AppColors.primary, width: 1.5) : null,
       ),
@@ -222,7 +231,7 @@ class CommunityScreen extends ConsumerWidget {
             width: 30,
             child: Text(
               '$positionº',
-              style: AppTextStyles.body.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: position <= 3 ? AppColors.primary : AppColors.textSecondary,
                 fontWeight: FontWeight.bold,
               ),
@@ -240,7 +249,7 @@ class CommunityScreen extends ConsumerWidget {
           Expanded(
             child: Text(
               user.name,
-              style: AppTextStyles.body.copyWith(
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: user.name == 'Eu (Você)' ? AppColors.primary : AppColors.textPrimary,
                 fontWeight: user.name == 'Eu (Você)' ? FontWeight.bold : FontWeight.normal,
               ),
@@ -248,8 +257,8 @@ class CommunityScreen extends ConsumerWidget {
           ),
           Text(
             scoreText,
-            style: AppTextStyles.body.copyWith(
-              color: AppColors.accent,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColors.info,
               fontWeight: FontWeight.bold,
             ),
           ),
