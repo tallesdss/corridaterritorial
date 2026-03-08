@@ -11,6 +11,8 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 - Planejar a implementação de novas telas e transições
 - Servir como referência para designers e desenvolvedores
 
+> ⚠️ **Dados Mockados:** Todas as telas consomem dados de **mock services** locais. Nenhuma tela depende de backend real. Os mockups poderão ser substituídos por dados reais no futuro.
+
 ---
 
 ## 🧭 Fluxo Geral de Navegação
@@ -23,6 +25,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
                            │
               ┌────────────▼────────────┐
               │  Usuário autenticado?   │
+              │  (estado local mockado) │
               └────────────┬────────────┘
                      Não / │ \ Sim
                       ┌────┘  └────┐
@@ -71,14 +74,16 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 |-------------------|------------------------------------------------|
 | Campo E-mail       | Input para e-mail do usuário                   |
 | Campo Senha        | Input para senha (com toggle de visibilidade)  |
-| Botão "Entrar"     | Autentica e redireciona para **Home**          |
+| Botão "Entrar"     | Valida com MockAuthService → redireciona para **Home** |
 | Link "Esqueci minha senha" | Leva para **Recuperar Senha**          |
 | Link "Criar conta" | Leva para **Cadastro**                        |
 
 **Fluxos:**
-- Login com sucesso → **Home**
-- Senha incorreta → Exibe mensagem de erro
+- Login com sucesso (mockado) → **Home**
+- Senha incorreta → Exibe mensagem de erro (validação local)
 - "Esqueci minha senha" → **Recuperar Senha**
+
+**Dados:** MockAuthService valida credenciais contra dados mockados locais.
 
 ---
 
@@ -92,8 +97,10 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 | Campo E-mail       | E-mail para cadastro                           |
 | Campo Senha        | Senha com requisitos mínimos                   |
 | Campo Confirmar Senha | Confirmação de senha                        |
-| Botão "Cadastrar"  | Cria conta e redireciona para **Home**         |
+| Botão "Cadastrar"  | Cria conta local (mockada) → redireciona para **Home** |
 | Link "Já tenho conta" | Volta para **Login**                        |
+
+**Dados:** MockAuthService cria usuário localmente.
 
 ---
 
@@ -104,9 +111,11 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 | Componente         | Descrição                                      |
 |-------------------|------------------------------------------------|
 | Campo E-mail       | E-mail cadastrado                              |
-| Botão "Enviar"     | Envia link de recuperação por e-mail           |
-| Mensagem de sucesso | Confirma que o e-mail foi enviado             |
+| Botão "Enviar"     | Simula envio de e-mail (delay mockado)         |
+| Mensagem de sucesso | Confirma que o "e-mail foi enviado" (mockado) |
 | Link "Voltar"      | Retorna para **Login**                         |
+
+**Dados:** MockAuthService simula envio com delay e retorna sucesso.
 
 ---
 
@@ -116,12 +125,14 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 | Componente         | Descrição                                      |
 |-------------------|------------------------------------------------|
-| Saudação           | "Olá, {nome}!" com horário contextual          |
-| Card de Progresso  | Métricas resumidas (km rodados, territórios)   |
-| Card de Desafios   | Desafios ativos do momento                     |
-| Card de Eventos    | Eventos da comunidade                           |
+| Saudação           | "Olá, {nome}!" com horário contextual (dados mockados) |
+| Card de Progresso  | Métricas resumidas — km rodados, territórios (mockados) |
+| Card de Desafios   | Desafios ativos do momento (dados mockados)    |
+| Card de Eventos    | Eventos da comunidade (dados mockados)          |
 | FAB "Iniciar Corrida" | Botão flutuante → Leva para **Tela de Corrida** |
 | Bottom Navigation  | Navegação entre as abas principais              |
+
+**Dados:** MockRunService, MockRankingService fornecem métricas e desafios.
 
 ---
 
@@ -135,12 +146,14 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 | Trajeto              | Linha desenhada no mapa conforme o corredor se move |
 | Overlay de Métricas  | Painel com: Distância, Calorias, Pace, Duração |
 | Botão Pausar         | Pausa a corrida e o rastreamento GPS           |
-| Botão Finalizar      | Encerra a corrida e salva os dados             |
+| Botão Finalizar      | Encerra a corrida e salva os dados localmente  |
 
 **Fluxos:**
 - Pausar → Exibe botões "Retomar" e "Finalizar"
-- Finalizar → Salva corrida → Exibe **Resumo da Corrida**
+- Finalizar → Salva corrida localmente (mockado) → Exibe **Resumo da Corrida**
 - Território conquistado → Animação de conquista
+
+**Dados:** GPS real + cálculos locais. Dados salvos via MockRunService.
 
 ---
 
@@ -152,9 +165,11 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 |---------------------|------------------------------------------------|
 | Mapa com trajeto     | Visualização do percurso completo              |
 | Métricas finais      | Distância, duração, calorias, pace             |
-| Território ganho     | Área conquistada (se houver)                   |
+| Território ganho     | Área conquistada (se houver, calculada localmente) |
 | Botão "Compartilhar" | Compartilha o resultado                        |
 | Botão "Voltar"       | Retorna para **Home**                          |
+
+**Dados:** Dados da corrida recém-finalizada (local).
 
 ---
 
@@ -168,6 +183,8 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 | Lista de Ranking     | Lista ordenada com avatar, nome, território, posição |
 | Filtros              | Alternar entre: Território, Distância, Conquistas |
 
+**Dados:** MockRankingService fornece lista de corredores fictícios.
+
 ---
 
 ### 9. Tela Activity (Histórico)
@@ -180,6 +197,8 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 | Card de corrida      | Ao tocar → Exibe **Resumo da Corrida**        |
 | Filtros de período   | Semana, Mês, Ano, Todos                        |
 
+**Dados:** MockRunService retorna lista de corridas mockadas + corridas do usuário.
+
 ---
 
 ### 10. Tela Progress (Progresso)
@@ -188,10 +207,12 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 | Componente           | Descrição                                     |
 |---------------------|------------------------------------------------|
-| Gráfico semanal      | Distância percorrida por dia                   |
+| Gráfico semanal      | Distância percorrida por dia (dados mockados)  |
 | Métricas totais      | Km total, Corridas totais, Territórios totais  |
 | Nível do corredor    | Barra de progresso para o próximo nível        |
 | Conquistas/Badges    | Medalhas e conquistas desbloqueadas            |
+
+**Dados:** Calculados localmente a partir dos dados de MockRunService.
 
 ---
 
@@ -201,12 +222,14 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 | Componente           | Descrição                                     |
 |---------------------|------------------------------------------------|
-| Avatar grande        | Foto/avatar do corredor (editável)             |
+| Avatar grande        | Foto/avatar do corredor (editável localmente)  |
 | Nome do corredor     | Nome de exibição                               |
-| Estatísticas         | Total de corridas, distância, territórios      |
-| Botão "Editar Perfil" | Permite editar nome e avatar                 |
-| Botão "Logout"       | Encerra sessão → Volta para **Login**          |
+| Estatísticas         | Total de corridas, distância, territórios (mockados) |
+| Botão "Editar Perfil" | Permite editar nome e avatar (salvo localmente) |
+| Botão "Logout"       | Limpa estado local → Volta para **Login**      |
 | Configurações        | Preferências do app                            |
+
+**Dados:** MockAuthService fornece dados do usuário mockado.
 
 ---
 

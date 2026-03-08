@@ -11,6 +11,8 @@ Este documento organiza o **planejamento de desenvolvimento** do Corrida Territo
 - Planejar a alocação de tempo e esforço
 - Identificar dependências entre tarefas
 
+> ⚠️ **100% Frontend:** Todas as sprints são exclusivamente frontend. Dados são fornecidos por **mock services/data** que poderão ser substituídos por backend real no futuro.
+
 ---
 
 ## 📊 Visão Geral das Sprints
@@ -27,23 +29,22 @@ Este documento organiza o **planejamento de desenvolvimento** do Corrida Territo
 
 ## 🏃 Sprint 1 — Fundação e Autenticação
 
-**Objetivo:** Ter o projeto configurado, o Design System implementado, e o fluxo de autenticação completo funcionando.
+**Objetivo:** Ter o projeto configurado, o Design System implementado, e o fluxo de autenticação completo funcionando com dados mockados.
 
 ### Tarefas
 
-- [ ] Configurar projeto Flutter com dependências (Riverpod, GoRouter, Supabase)
-- [ ] Criar estrutura de pastas (models, providers, services, screens, widgets, theme, routes)
-- [ ] Implementar o Design System no código (cores, tipografia, tema)
-- [ ] Configurar projeto no Supabase (Auth, Database)
-- [ ] Criar tabela `profiles` com RLS
-- [ ] Implementar tela de **Onboarding**
-- [ ] Implementar tela de **Login**
-- [ ] Implementar tela de **Cadastro**
-- [ ] Implementar tela de **Recuperar Senha**
-- [ ] Configurar rotas com GoRouter (protegidas e públicas)
-- [ ] Implementar serviço de autenticação (AuthService)
-- [ ] Implementar provider de autenticação (AuthProvider)
-- [ ] Testar fluxo completo: cadastro → login → home → logout
+1. [ ] Configurar projeto Flutter com dependências (Riverpod, GoRouter, Google Fonts)
+2. [ ] Criar estrutura de pastas (models, providers, services, screens, widgets, theme, routes, mocks)
+3. [ ] Implementar o Design System no código (cores, tipografia, tema) conforme `designsystem.md`
+4. [ ] Criar modelos de dados (`UserModel`) com dados mockados
+5. [ ] Implementar `MockAuthService` (signUp, signIn, signOut, resetPassword simulados)
+6. [ ] Implementar `AuthProvider` com Riverpod (gerenciamento de estado de autenticação)
+7. [ ] Implementar tela de **Onboarding** com Design System
+8. [ ] Implementar tela de **Login** com validação local (MockAuthService)
+9. [ ] Implementar tela de **Cadastro** com validação de formulário
+10. [ ] Implementar tela de **Recuperar Senha** com simulação de envio
+11. [ ] Configurar rotas com GoRouter (protegidas e públicas, redirect baseado em AuthProvider)
+12. [ ] Testar fluxo completo: cadastro → login → home → logout (tudo mockado)
 
 ---
 
@@ -53,80 +54,82 @@ Este documento organiza o **planejamento de desenvolvimento** do Corrida Territo
 
 ### Tarefas
 
-- [ ] Integrar Google Maps Flutter
-- [ ] Implementar serviço de geolocalização (GeoService)
-- [ ] Criar tela de **Corrida** com mapa fullscreen
-- [ ] Implementar rastreamento de posição em tempo real
-- [ ] Desenhar trajeto no mapa durante a corrida
-- [ ] Implementar overlay de métricas (distância, calorias, pace, duração)
-- [ ] Implementar funcionalidade de pausar/retomar corrida
-- [ ] Implementar funcionalidade de finalizar corrida
-- [ ] Criar tabela `runs` no Supabase com RLS
-- [ ] Salvar dados da corrida ao finalizar
-- [ ] Implementar tela de **Resumo da Corrida**
-- [ ] Implementar tela **Home** (dashboard) com card de progresso
+1. [ ] Integrar Google Maps Flutter
+2. [ ] Implementar serviço de geolocalização (GeoService) com GPS real
+3. [ ] Criar tela de **Corrida** com mapa fullscreen e Design System
+4. [ ] Implementar rastreamento de posição em tempo real
+5. [ ] Desenhar trajeto no mapa durante a corrida
+6. [ ] Implementar overlay de métricas (distância, calorias, pace, duração) — cálculo local
+7. [ ] Implementar funcionalidade de pausar/retomar corrida
+8. [ ] Implementar funcionalidade de finalizar corrida
+9. [ ] Criar modelo `RunModel` e dados mockados de corridas anteriores
+10. [ ] Implementar `MockRunService` (salvar e listar corridas localmente)
+11. [ ] Implementar tela de **Resumo da Corrida** com dados locais
+12. [ ] Implementar tela **Home** (dashboard) com cards de progresso (dados mockados)
 
 ---
 
 ## 🏃 Sprint 3 — Territórios e Ranking
 
-**Objetivo:** As corridas geram territórios no mapa e é possível visualizar o ranking entre corredores.
+**Objetivo:** As corridas geram territórios no mapa (cálculo local) e é possível visualizar o ranking com dados mockados.
 
 ### Tarefas
 
-- [ ] Criar tabela `territories` no Supabase com RLS
-- [ ] Implementar lógica de cálculo de território a partir do trajeto da corrida
-- [ ] Implementar RPC `conquer_territory` no Supabase
-- [ ] Exibir territórios conquistados no mapa (polígonos coloridos)
-- [ ] Implementar lógica de disputa/tomada de território
-- [ ] Implementar RPC `calculate_ranking` no Supabase
-- [ ] Implementar tela **Community** (Ranking/Leaderboard)
-- [ ] Exibir Top 3 com destaque visual
-- [ ] Implementar filtros de ranking (Território, Distância, Conquistas)
-- [ ] Animação de "Território Conquistado"
+1. [ ] Criar modelo `TerritoryModel` com dados mockados de territórios
+2. [ ] Implementar lógica de cálculo de território a partir do trajeto da corrida (algoritmo local)
+3. [ ] Implementar `MockTerritoryService` (conquista e listagem de territórios locais)
+4. [ ] Exibir territórios conquistados no mapa (polígonos coloridos)
+5. [ ] Implementar lógica de disputa/tomada de território (simulada localmente)
+6. [ ] Criar modelo `RankerModel` com dados mockados de corredores fictícios
+7. [ ] Implementar `MockRankingService` (ranking calculado localmente)
+8. [ ] Implementar tela **Community** (Ranking/Leaderboard) com dados mockados
+9. [ ] Exibir Top 3 com destaque visual
+10. [ ] Implementar filtros de ranking (Território, Distância, Conquistas)
+11. [ ] Animação de "Território Conquistado"
 
 ---
 
 ## 🏃 Sprint 4 — Perfil, Histórico e Progresso
 
-**Objetivo:** O corredor pode ver seu perfil, histórico de corridas e acompanhar seu progresso.
+**Objetivo:** O corredor pode ver seu perfil, histórico de corridas e acompanhar seu progresso (tudo com dados mockados).
 
 ### Tarefas
 
-- [ ] Implementar tela **Profile** com avatar e estatísticas
-- [ ] Implementar edição de perfil (nome, avatar)
-- [ ] Implementar upload de avatar no Supabase Storage
-- [ ] Implementar tela **Activity** (Histórico de corridas)
-- [ ] Implementar filtros de período (Semana, Mês, Ano)
-- [ ] Implementar tela **Progress** com gráficos
-- [ ] Implementar sistema de **nível do corredor**
-- [ ] Implementar sistema de **badges/conquistas**
-- [ ] Animações de "Novo Recorde" e "Level Up"
+1. [ ] Implementar tela **Profile** com avatar e estatísticas (dados mockados)
+2. [ ] Implementar edição de perfil (nome, avatar) — salvo localmente
+3. [ ] Implementar seleção de avatar local (galeria de avatares ou image picker local)
+4. [ ] Implementar tela **Activity** (Histórico de corridas com dados mockados)
+5. [ ] Implementar filtros de período (Semana, Mês, Ano)
+6. [ ] Implementar tela **Progress** com gráficos (dados calculados localmente)
+7. [ ] Implementar sistema de **nível do corredor** (lógica local)
+8. [ ] Implementar sistema de **badges/conquistas** (verificação local contra dados mockados)
+9. [ ] Animações de "Novo Recorde" e "Level Up"
 
 ---
 
 ## 🏃 Sprint 5 — Desafios, Polish e Lançamento
 
-**Objetivo:** Adicionar funcionalidades de engajamento, polir a experiência e preparar para lançamento.
+**Objetivo:** Adicionar funcionalidades de engajamento com dados mockados, polir a experiência e preparar para lançamento.
 
 ### Tarefas
 
-- [ ] Implementar sistema de **desafios** periódicos
-- [ ] Implementar **eventos** da comunidade
-- [ ] Botão de **compartilhar** resultados de corridas
-- [ ] Revisar e polir todas as telas (animações, transições, feedback visual)
-- [ ] Testes completos em dispositivo real (Android / iOS)
-- [ ] Otimização de performance (especialmente mapa e GPS)
-- [ ] Corrigir bugs conhecidos (ver `05-testes-e-bugs.md`)
-- [ ] Configurar build de produção
-- [ ] Deploy no Firebase Hosting (versão web, se aplicável)
-- [ ] Preparar para publicação nas lojas (Play Store / App Store)
+1. [ ] Implementar sistema de **desafios** periódicos (dados mockados)
+2. [ ] Implementar **eventos** da comunidade (dados mockados)
+3. [ ] Botão de **compartilhar** resultados de corridas (share nativo)
+4. [ ] Revisar e polir todas as telas (animações, transições, feedback visual)
+5. [ ] Testes completos em dispositivo real (Android / iOS)
+6. [ ] Otimização de performance (especialmente mapa e GPS)
+7. [ ] Corrigir bugs conhecidos (ver `05-testes-e-bugs.md`)
+8. [ ] Preparar documentação para futura integração com backend
+9. [ ] Configurar build de produção
+10. [ ] Preparar para publicação nas lojas (Play Store / App Store)
 
 ---
 
 ## 📌 Notas
 
 - As sprints são estimativas e podem ser ajustadas conforme o andamento
-- Tarefas podem ser detalhadas em sub-tarefas no Jira se necessário
+- **Todos os dados são mockados** — a troca para backend real será feita em fase futura
+- A arquitetura de Services + Providers facilita a substituição de mocks por serviços reais
 - Consulte `01-requisitos-e-regras.md` para validar o escopo de cada tarefa
-- Consulte `02-arquitetura-e-backend.md` para referência técnica durante a implementação
+- Consulte `02-arquitetura-frontend.md` para referência técnica durante a implementação
