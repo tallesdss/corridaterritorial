@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 
@@ -190,7 +191,7 @@ class HomeScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // TODO: Mudar para tela de corrida
+          context.push('/run');
         },
         backgroundColor: AppColors.primary,
         icon: const Icon(Icons.play_arrow, color: AppColors.textInverse),

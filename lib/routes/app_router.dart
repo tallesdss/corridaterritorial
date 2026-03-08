@@ -7,6 +7,7 @@ import '../screens/login_screen.dart';
 import '../screens/onboarding_screen.dart';
 import '../screens/signup_screen.dart';
 import '../screens/recover_password_screen.dart';
+import '../screens/running_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -47,6 +48,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/recover_password',
         builder: (context, state) => const RecoverPasswordScreen(),
+      ),
+      GoRoute(
+        path: '/run',
+        builder: (context, state) => const RunningScreen(),
       ),
     ],
   );

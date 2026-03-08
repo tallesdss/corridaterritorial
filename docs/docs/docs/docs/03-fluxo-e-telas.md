@@ -136,7 +136,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 6. [ ] Tela de Corrida (Running Screen)
+### 6. [x] Tela de Corrida (Running Screen)
 
 **Rota:** `/run`
 
@@ -157,7 +157,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 7. [ ] Tela de Resumo da Corrida
+### 7. [x] Tela de Resumo da Corrida
 
 **Rota:** `/run/summary`
 
@@ -169,7 +169,11 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 | Botão "Compartilhar" | Compartilha o resultado                        |
 | Botão "Voltar"       | Retorna para **Home**                          |
 
-**Dados:** Dados da corrida recém-finalizada (local).
+**Fluxos:**
+- "Compartilhar" → Simula o compartilhamento (ou abre janela nativa no device) com a imagem do trajeto e métricas
+- "Voltar" → Limpa a stack de navegação e redireciona para a **Home**
+
+**Dados:** Dados da corrida recém-finalizada (local) providos pelo `MockRunService`.
 
 ---
 
