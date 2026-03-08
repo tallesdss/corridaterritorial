@@ -1,0 +1,221 @@
+# 🖥️ 03 — Fluxo de Navegação e Telas
+
+## 🎯 Função deste Documento
+
+Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha **cada tela** com seus componentes visuais, ações possíveis e para onde cada interação leva. É o mapa de navegação completo do Corrida Territorial.
+
+**Use este documento para:**
+- Entender o fluxo completo de navegação do app
+- Saber quais componentes cada tela deve conter antes de implementá-la
+- Validar se a experiência do usuário está coerente
+- Planejar a implementação de novas telas e transições
+- Servir como referência para designers e desenvolvedores
+
+---
+
+## 🧭 Fluxo Geral de Navegação
+
+```
+                    ┌──────────────┐
+                    │  Splash /    │
+                    │  Onboarding  │
+                    └──────┬───────┘
+                           │
+              ┌────────────▼────────────┐
+              │  Usuário autenticado?   │
+              └────────────┬────────────┘
+                     Não / │ \ Sim
+                      ┌────┘  └────┐
+                      ▼            ▼
+              ┌──────────┐  ┌──────────┐
+              │  Login   │  │   Home   │
+              └────┬─────┘  └────┬─────┘
+                   │             │
+          ┌────────┼──────┐     │
+          ▼        ▼      ▼     │
+     Cadastro  Recuperar  ──────┘
+               Senha
+                           │
+              ┌────────────▼────────────┐
+              │   Bottom Navigation     │
+              │                         │
+              │  Home | Community |     │
+              │  Activity | Progress | │
+              │  Profile                │
+              └─────────────────────────┘
+```
+
+---
+
+## 📱 Descrição de Cada Tela
+
+### 1. Tela de Splash / Onboarding
+
+**Rota:** `/onboarding`
+
+| Componente    | Descrição                                          |
+|--------------|-----------------------------------------------------|
+| Hero Image    | Imagem/ilustração motivacional de corrida           |
+| Título        | Nome do app e tagline                                |
+| Subtítulo     | Breve descrição do conceito                          |
+| Botão CTA     | "Começar" → Leva para **Cadastro**                  |
+| Link Login    | "Já tenho conta" → Leva para **Login**               |
+
+---
+
+### 2. Tela de Login
+
+**Rota:** `/login`
+
+| Componente         | Descrição                                      |
+|-------------------|------------------------------------------------|
+| Campo E-mail       | Input para e-mail do usuário                   |
+| Campo Senha        | Input para senha (com toggle de visibilidade)  |
+| Botão "Entrar"     | Autentica e redireciona para **Home**          |
+| Link "Esqueci minha senha" | Leva para **Recuperar Senha**          |
+| Link "Criar conta" | Leva para **Cadastro**                        |
+
+**Fluxos:**
+- Login com sucesso → **Home**
+- Senha incorreta → Exibe mensagem de erro
+- "Esqueci minha senha" → **Recuperar Senha**
+
+---
+
+### 3. Tela de Cadastro
+
+**Rota:** `/register`
+
+| Componente         | Descrição                                      |
+|-------------------|------------------------------------------------|
+| Campo Nome         | Nome de exibição do corredor                   |
+| Campo E-mail       | E-mail para cadastro                           |
+| Campo Senha        | Senha com requisitos mínimos                   |
+| Campo Confirmar Senha | Confirmação de senha                        |
+| Botão "Cadastrar"  | Cria conta e redireciona para **Home**         |
+| Link "Já tenho conta" | Volta para **Login**                        |
+
+---
+
+### 4. Tela de Recuperar Senha
+
+**Rota:** `/forgot-password`
+
+| Componente         | Descrição                                      |
+|-------------------|------------------------------------------------|
+| Campo E-mail       | E-mail cadastrado                              |
+| Botão "Enviar"     | Envia link de recuperação por e-mail           |
+| Mensagem de sucesso | Confirma que o e-mail foi enviado             |
+| Link "Voltar"      | Retorna para **Login**                         |
+
+---
+
+### 5. Tela Home (Dashboard)
+
+**Rota:** `/home`
+
+| Componente         | Descrição                                      |
+|-------------------|------------------------------------------------|
+| Saudação           | "Olá, {nome}!" com horário contextual          |
+| Card de Progresso  | Métricas resumidas (km rodados, territórios)   |
+| Card de Desafios   | Desafios ativos do momento                     |
+| Card de Eventos    | Eventos da comunidade                           |
+| FAB "Iniciar Corrida" | Botão flutuante → Leva para **Tela de Corrida** |
+| Bottom Navigation  | Navegação entre as abas principais              |
+
+---
+
+### 6. Tela de Corrida (Running Screen)
+
+**Rota:** `/run`
+
+| Componente           | Descrição                                     |
+|---------------------|------------------------------------------------|
+| Mapa (fullscreen)    | Google Maps com a posição do usuário em tempo real |
+| Trajeto              | Linha desenhada no mapa conforme o corredor se move |
+| Overlay de Métricas  | Painel com: Distância, Calorias, Pace, Duração |
+| Botão Pausar         | Pausa a corrida e o rastreamento GPS           |
+| Botão Finalizar      | Encerra a corrida e salva os dados             |
+
+**Fluxos:**
+- Pausar → Exibe botões "Retomar" e "Finalizar"
+- Finalizar → Salva corrida → Exibe **Resumo da Corrida**
+- Território conquistado → Animação de conquista
+
+---
+
+### 7. Tela de Resumo da Corrida
+
+**Rota:** `/run/summary`
+
+| Componente           | Descrição                                     |
+|---------------------|------------------------------------------------|
+| Mapa com trajeto     | Visualização do percurso completo              |
+| Métricas finais      | Distância, duração, calorias, pace             |
+| Território ganho     | Área conquistada (se houver)                   |
+| Botão "Compartilhar" | Compartilha o resultado                        |
+| Botão "Voltar"       | Retorna para **Home**                          |
+
+---
+
+### 8. Tela Community (Ranking / Leaderboard)
+
+**Rota:** `/community`
+
+| Componente           | Descrição                                     |
+|---------------------|------------------------------------------------|
+| Top 3 Destaque       | Avatares grandes dos 3 primeiros colocados     |
+| Lista de Ranking     | Lista ordenada com avatar, nome, território, posição |
+| Filtros              | Alternar entre: Território, Distância, Conquistas |
+
+---
+
+### 9. Tela Activity (Histórico)
+
+**Rota:** `/activity`
+
+| Componente           | Descrição                                     |
+|---------------------|------------------------------------------------|
+| Lista de corridas    | Histórico de corridas com data, distância, duração |
+| Card de corrida      | Ao tocar → Exibe **Resumo da Corrida**        |
+| Filtros de período   | Semana, Mês, Ano, Todos                        |
+
+---
+
+### 10. Tela Progress (Progresso)
+
+**Rota:** `/progress`
+
+| Componente           | Descrição                                     |
+|---------------------|------------------------------------------------|
+| Gráfico semanal      | Distância percorrida por dia                   |
+| Métricas totais      | Km total, Corridas totais, Territórios totais  |
+| Nível do corredor    | Barra de progresso para o próximo nível        |
+| Conquistas/Badges    | Medalhas e conquistas desbloqueadas            |
+
+---
+
+### 11. Tela Profile (Perfil)
+
+**Rota:** `/profile`
+
+| Componente           | Descrição                                     |
+|---------------------|------------------------------------------------|
+| Avatar grande        | Foto/avatar do corredor (editável)             |
+| Nome do corredor     | Nome de exibição                               |
+| Estatísticas         | Total de corridas, distância, territórios      |
+| Botão "Editar Perfil" | Permite editar nome e avatar                 |
+| Botão "Logout"       | Encerra sessão → Volta para **Login**          |
+| Configurações        | Preferências do app                            |
+
+---
+
+## ⬇️ Bottom Navigation
+
+| Aba          | Ícone     | Destino        |
+|-------------|----------|----------------|
+| Home         | 🏠       | `/home`         |
+| Community    | 👥       | `/community`    |
+| Activity     | 🏃       | `/activity`     |
+| Progress     | 📊       | `/progress`     |
+| Profile      | 👤       | `/profile`      |
