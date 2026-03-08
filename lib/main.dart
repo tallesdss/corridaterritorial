@@ -11,16 +11,18 @@ void main() {
   );
 }
 
-class CorridaTerritorialApp extends StatelessWidget {
+class CorridaTerritorialApp extends ConsumerWidget {
   const CorridaTerritorialApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+    
     return MaterialApp.router(
       title: 'Corrida Territorial',
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.darkTheme, // Forçando darkTheme como padrão
       darkTheme: AppTheme.darkTheme,
-      routerConfig: appRouter,
+      routerConfig: router,
       debugShowCheckedModeBanner: false,
     );
   }

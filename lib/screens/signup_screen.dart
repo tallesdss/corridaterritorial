@@ -5,46 +5,48 @@ import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
 import '../widgets/custom_text_field.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
-  const LoginScreen({super.key});
+class SignUpScreen extends ConsumerStatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
 
-  Future<void> _handleLogin() async {
+  Future<void> _handleSignUp() async {
+    final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, preencha todos os campos.')),
+        const SnackBar(content: Text('Preencha todos os campos')),
       );
       return;
     }
 
     setState(() => _isLoading = true);
-    await ref.read(authProvider.notifier).signIn(email, password);
+    await ref.read(authProvider.notifier).signUp(name, email, password);
     final authState = ref.read(authProvider);
 
     if (mounted) {
       setState(() => _isLoading = false);
       if (authState.hasError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-             content: Text(authState.error.toString()),
-             backgroundColor: AppColors.error,
-          ),
-        );
+         ScaffoldMessenger.of(context).showSnackBar(
+           SnackBar(
+               content: Text(authState.error.toString()),
+               backgroundColor: AppColors.error,
+           ),
+         );
       } else {
          ScaffoldMessenger.of(context).showSnackBar(
            const SnackBar(
-               content: Text('Login com sucesso!'),
+               content: Text('Cadastro concluído!'),
                backgroundColor: AppColors.success,
            ),
          );
@@ -54,6 +56,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -68,23 +71,29 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         leading: BackButton(onPressed: () => context.pop()),
       ),
       body: SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Bem-vindo de\nvolta',
+                'Junte-se a nós',
                 style: Theme.of(context).textTheme.displayMedium,
               ),
               const SizedBox(height: 8),
               Text(
-                'Entre para continuar sua conquista.',
+                'Crie sua conta e comece a correr.',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: AppColors.textSecondary,
                 ),
               ),
               const SizedBox(height: 32),
+              CustomTextField(
+                controller: _nameController,
+                labelText: 'Nome Completo',
+                hintText: 'Runner Zero',
+              ),
+              const SizedBox(height: 16),
               CustomTextField(
                 controller: _emailController,
                 labelText: 'Email',
@@ -95,23 +104,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               CustomTextField(
                  controller: _passwordController,
                  labelText: 'Senha',
-                 hintText: 'Senha',
+                 hintText: 'Sua senha',
                  obscureText: true,
               ),
-              const SizedBox(height: 8),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () => context.push('/recover_password'),
-                  child: const Text('Esqueceu a senha?', style: TextStyle(color: AppColors.primary)),
-                ),
-              ),
-              const Spacer(),
+              const SizedBox(height: 32),
               _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : ElevatedButton(
-                      onPressed: _handleLogin,
-                      child: const Text('Entrar'),
+                      onPressed: _handleSignUp,
+                      child: const Text('Criar Conta'),
                     ),
               const SizedBox(height: 20),
             ],

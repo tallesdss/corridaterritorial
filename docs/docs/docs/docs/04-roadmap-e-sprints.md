@@ -19,8 +19,8 @@ Este documento organiza o **planejamento de desenvolvimento** do Corrida Territo
 
 | Sprint | Tema                           | Duração  | Status      |
 |--------|--------------------------------|----------|-------------|
-| 1      | Fundação e Autenticação        | 2 semanas | 🟡 Em progresso |
-| 2      | Corrida e Mapa                 | 2 semanas | ⚪ Pendente |
+| 1      | Fundação e Autenticação        | 2 semanas | � Concluída  |
+| 2      | Corrida e Mapa                 | 2 semanas | 🟡 Em progresso |
 | 3      | Territórios e Ranking          | 2 semanas | ⚪ Pendente |
 | 4      | Perfil, Histórico e Progresso  | 2 semanas | ⚪ Pendente |
 | 5      | Desafios, Polish e Lançamento  | 2 semanas | ⚪ Pendente |
@@ -33,18 +33,18 @@ Este documento organiza o **planejamento de desenvolvimento** do Corrida Territo
 
 ### Tarefas
 
-1. [ ] Configurar projeto Flutter com dependências (Riverpod, GoRouter, Google Fonts)
-2. [ ] Criar estrutura de pastas (models, providers, services, screens, widgets, theme, routes, mocks)
-3. [ ] Implementar o Design System no código (cores, tipografia, tema) conforme `designsystem.md`
-4. [ ] Criar modelos de dados (`UserModel`) com dados mockados
-5. [ ] Implementar `MockAuthService` (signUp, signIn, signOut, resetPassword simulados)
-6. [ ] Implementar `AuthProvider` com Riverpod (gerenciamento de estado de autenticação)
-7. [ ] Implementar tela de **Onboarding** com Design System
-8. [ ] Implementar tela de **Login** com validação local (MockAuthService)
-9. [ ] Implementar tela de **Cadastro** com validação de formulário
-10. [ ] Implementar tela de **Recuperar Senha** com simulação de envio
-11. [ ] Configurar rotas com GoRouter (protegidas e públicas, redirect baseado em AuthProvider)
-12. [ ] Testar fluxo completo: cadastro → login → home → logout (tudo mockado)
+1. [x] Configurar projeto Flutter com dependências (Riverpod, GoRouter, Google Fonts)
+2. [x] Criar estrutura de pastas (models, providers, services, screens, widgets, theme, routes, mocks)
+3. [x] Implementar o Design System no código (cores, tipografia, tema) conforme `designsystem.md`
+4. [x] Criar modelos de dados (`UserModel`) com dados mockados
+5. [x] Implementar `MockAuthService` (signUp, signIn, signOut, resetPassword simulados)
+6. [x] Implementar `AuthProvider` com Riverpod (gerenciamento de estado de autenticação)
+7. [x] Implementar tela de **Onboarding** com Design System
+8. [x] Implementar tela de **Login** com validação local (MockAuthService)
+9. [x] Implementar tela de **Cadastro** com validação de formulário
+10. [x] Implementar tela de **Recuperar Senha** com simulação de envio
+11. [x] Configurar rotas com GoRouter (protegidas e públicas, redirect baseado em AuthProvider)
+12. [x] Testar fluxo completo: cadastro → login → home → logout (tudo mockado)
 
 ---
 

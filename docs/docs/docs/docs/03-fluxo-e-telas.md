@@ -52,7 +52,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ## 📱 Descrição de Cada Tela
 
-### 1. Tela de Splash / Onboarding
+### 1. [x] Tela de Splash / Onboarding
 
 **Rota:** `/onboarding`
 
@@ -66,7 +66,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 2. Tela de Login
+### 2. [x] Tela de Login
 
 **Rota:** `/login`
 
@@ -87,7 +87,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 3. Tela de Cadastro
+### 3. [x] Tela de Cadastro
 
 **Rota:** `/register`
 
@@ -104,7 +104,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 4. Tela de Recuperar Senha
+### 4. [x] Tela de Recuperar Senha
 
 **Rota:** `/forgot-password`
 
@@ -119,7 +119,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 5. Tela Home (Dashboard)
+### 5. [ ] Tela Home (Dashboard)
 
 **Rota:** `/home`
 
@@ -136,7 +136,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 6. Tela de Corrida (Running Screen)
+### 6. [ ] Tela de Corrida (Running Screen)
 
 **Rota:** `/run`
 
@@ -157,7 +157,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 7. Tela de Resumo da Corrida
+### 7. [ ] Tela de Resumo da Corrida
 
 **Rota:** `/run/summary`
 
@@ -173,7 +173,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 8. Tela Community (Ranking / Leaderboard)
+### 8. [ ] Tela Community (Ranking / Leaderboard)
 
 **Rota:** `/community`
 
@@ -187,7 +187,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 9. Tela Activity (Histórico)
+### 9. [ ] Tela Activity (Histórico)
 
 **Rota:** `/activity`
 
@@ -201,7 +201,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 10. Tela Progress (Progresso)
+### 10. [ ] Tela Progress (Progresso)
 
 **Rota:** `/progress`
 
@@ -216,7 +216,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 11. Tela Profile (Perfil)
+### 11. [ ] Tela Profile (Perfil)
 
 **Rota:** `/profile`
 
