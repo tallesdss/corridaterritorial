@@ -1,41 +1,39 @@
 # 🎨 Running Territory App — Design System
 
-## 🎯 Objetivo
+---
 
-Definir padrões visuais e componentes para o aplicativo de corrida e conquista de territórios. O design prioriza métricas claras, foco na atividade física e elementos de gamificação.
+# 🎯 Objetivo
+
+Sistema visual para aplicativo de corrida com conquista de territórios, focado em **clareza de métricas**, **contraste alto** e **gamificação**.
 
 ---
 
-# 🧠 Princípios de Design
-
-• **Foco na atividade** → métricas e percurso são o elemento central
-• **Alto contraste** → fundo escuro para melhor leitura ao ar livre
-• **Feedback visual forte** → ações importantes com cores vibrantes
-• **Gamificação** → reforçar conquistas e progresso do usuário
-
----
-
-# 🎨 Paleta de Cores
+# 🎨 Color Tokens
 
 ## Primary
 
-Cor principal usada em ações e destaques.
-
 Primary: #C8FF2F
-Primary Dark: #A6D81F
-Primary Light: #E2FF7A
+Primary Hover: #D6FF5C
+Primary Active: #A6D81F
 
 ## Background
 
-Background Dark: #0F1115
-Background Medium: #1A1D23
+Background Primary: #0F1115
+Background Secondary: #1A1D23
 Background Card: #23262D
+Background Elevated: #2B2F36
 
 ## Text
 
 Text Primary: #FFFFFF
 Text Secondary: #9EA3AE
 Text Muted: #6B7280
+Text Inverse: #000000
+
+## Border
+
+Border Default: #2B2F36
+Border Soft: #1F2228
 
 ## Status
 
@@ -46,19 +44,20 @@ Info: #3B82F6
 
 ---
 
-# 🔤 Tipografia
+# 🔤 Typography
 
-Fonte recomendada
+Font Family
 
 Inter
 ou
 SF Pro
 
-## Heading
+## Headings
 
 H1
 Size: 34
 Weight: Bold
+Line Height: 40
 
 H2
 Size: 24
@@ -72,105 +71,146 @@ Weight: Medium
 
 Body Large
 Size: 16
-Weight: Regular
 
 Body Medium
 Size: 14
-Weight: Regular
 
 Caption
 Size: 12
-Weight: Regular
 
-## Métricas de corrida
+## Running Metrics
+
+Metric XL
+Size: 36
+Weight: Bold
 
 Metric Large
-Size: 32
-Weight: Bold
+Size: 28
 
 Metric Medium
 Size: 20
-Weight: SemiBold
 
 ---
 
-# 📦 Sistema de Espaçamento
+# 📏 Spacing System
 
-Spacing baseado em múltiplos de 4.
+Escala baseada em múltiplos de **4px**
 
-4px
-8px
-12px
-16px
-24px
-32px
-40px
-48px
+Spacing XS → 4px
+Spacing SM → 8px
+Spacing MD → 16px
+Spacing LG → 24px
+Spacing XL → 32px
+Spacing XXL → 40px
+Spacing XXXL → 48px
 
 Uso comum
 
-Card padding → 16
-Section spacing → 24
-Screen margin → 20
+Screen Padding → 20px
+Card Padding → 16px
+Section Gap → 24px
+Component Gap → 12px
 
 ---
 
-# 🔘 Botões
+# 🔲 Border Radius
+
+Small → 8px
+Medium → 16px
+Large → 20px
+Extra Large → 28px
+Full → 999px
+
+Uso comum
+
+Buttons → 28px
+Cards → 20px
+Inputs → 16px
+Avatars → Full
+
+---
+
+# 🌫 Shadow / Elevation
+
+## Shadow Small
+
+Usado em cards simples
+
+Blur: 8
+Opacity: 8%
+
+## Shadow Medium
+
+Usado em modais
+
+Blur: 16
+Opacity: 12%
+
+## Shadow Large
+
+Usado em elementos flutuantes
+
+Blur: 32
+Opacity: 18%
+
+Cor da sombra
+
+#000000
+
+---
+
+# 🔘 Buttons
 
 ## Primary Button
 
-Usado para ações principais.
+Height: 56px
+Padding Horizontal: 24px
+Border Radius: 28px
 
 Background: Primary
-Text: Dark
-Height: 56px
-Border Radius: 28px
-Font: 16 SemiBold
+Text: Black
 
-Exemplos
+Estados
 
-Start Journey
-Start Run
-Conquer Territory
+Default
+Hover
+Pressed
+Disabled
+
+---
 
 ## Secondary Button
 
 Background: Transparent
-Border: 1px solid #2B2F36
+Border: 1px solid Border Default
 Text: White
-Radius: 20
+
+Height: 48px
 
 ---
 
 # 📦 Cards
 
-Usados no dashboard.
+Card Default
 
-Background: #23262D
-Border Radius: 20
-Padding: 16
-Shadow: leve
+Background: Background Card
+Border Radius: 20px
+Padding: 16px
+Shadow: Small
 
 Estrutura
 
 Card
 ├ Title
 ├ Subtitle
-└ Metric
+├ Metric
+└ Action
 
 ---
 
-# 📊 Componentes de Métricas
+# 📊 Metric Component
 
-Utilizados durante corrida.
-
-Distance
-Calories
-Pace
-Time
-Heart Rate
-
-Layout
+Estrutura
 
 Metric Value
 Metric Label
@@ -180,19 +220,23 @@ Exemplo
 7.2 km
 Distance
 
+Espaçamento
+
+Label gap → 4px
+
 ---
 
-# 🗺️ Map Screen Layout
+# 🗺 Map Screen Layout
 
-Componentes
+Elementos
 
-Map View
-Running Path
+Map Layer
+Route Path
 User Position Marker
-Metrics Overlay
+Metric Overlay
 Control Buttons
 
-Overlay de métricas
+Overlay Layout
 
 Distance
 Calories
@@ -201,9 +245,9 @@ Duration
 
 ---
 
-# 🧭 Navegação
+# 🧭 Navigation
 
-Barra inferior com 5 itens.
+Bottom Navigation com **5 itens**
 
 Home
 Community
@@ -213,156 +257,132 @@ Profile
 
 Configuração
 
-Background: Dark
+Height: 72px
+Background: Background Secondary
+
 Active Icon: Primary
-Inactive Icon: Gray
+Inactive Icon: Text Muted
 
 ---
 
-# 🧍 Sistema de Avatar
+# 🧍 Avatar System
 
-Cada usuário possui um avatar animado.
+Formato
 
-Usado para
+Circular
 
-Mapa
+Sizes
+
+Small → 32px
+Medium → 48px
+Large → 64px
+XL → 96px
+
+Uso
+
 Ranking
 Perfil
-Conquista de território
-
-Avatar pode ter animação idle.
-
----
-
-# ✨ Sistema de Animações
-
-Recomendado usar Lottie.
-
-Eventos animados
-
-Territory Conquered
-New Record
-Run Completed
-Level Up
+Mapa
+Leaderboard
 
 ---
 
-# 📱 Telas Principais
+# 🏆 Ranking Component
 
-## Onboarding
+Elementos
 
-Componentes
-
-Hero image
-Headline
-Call to Action Button
-Login link
-
----
-
-## Dashboard
-
-Componentes
-
-Greeting
-Progress Card
-Challenges
-Events
-Bottom Navigation
-
----
-
-## Running Screen
-
-Componentes
-
-Map
-Metrics
-Route line
-Start button
-Pause button
-Finish button
-
----
-
-## Ranking Screen
-
-Componentes
-
-Top runners
 Avatar
-Territory size
-Position
+Runner Name
+Territory Size
+Rank Position
 
-Ranking baseado em
+Ordenação baseada em
 
-Área total dominada
-Número de territórios
-Distância corrida
+Territory Area
+Distance Run
+Total Conquests
 
 ---
 
 # 📐 Grid System
 
-Mobile Grid: 4 columns
-Margin: 20
-Gutter: 12
+Mobile Grid
+
+Columns: 4
+Margin: 20px
+Gutter: 12px
 
 ---
 
-# 🧱 Flutter Theme Base
+# ✨ Motion
 
-```dart
-ThemeData(
-  scaffoldBackgroundColor: Color(0xFF0F1115),
-  primaryColor: Color(0xFFC8FF2F),
+Animações curtas de feedback
 
-  textTheme: TextTheme(
-    headlineLarge: TextStyle(
-      fontSize: 34,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
+Run Started
+Territory Conquered
+New Record
+Level Up
 
-    bodyMedium: TextStyle(
-      fontSize: 16,
-      color: Color(0xFF9EA3AE),
-    ),
-  ),
+Duração recomendada
 
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Color(0xFFC8FF2F),
-      foregroundColor: Colors.black,
-      shape: StadiumBorder(),
-      minimumSize: Size(double.infinity, 56),
-    ),
-  ),
-)
-```
+150ms → micro interação
+300ms → transições
+500ms → animações principais
+
+---
+
+# 📱 Screen Structure
+
+## Onboarding
+
+Hero Image
+Title
+Subtitle
+CTA Button
+Login Link
+
+---
+
+## Dashboard
+
+Greeting
+Progress Card
+Challenges
+Events
+Navigation
+
+---
+
+## Running Screen
+
+Map
+Metrics
+Pause Button
+Finish Button
+
+---
+
+## Ranking Screen
+
+Leaderboard
+Runner Avatar
+Territory Size
+Rank
 
 ---
 
 # 🧠 Referência de UX
 
-Esse estilo de interface é inspirado em apps como o Nike Run Club e o Strava.
+Inspirado em apps como o Nike Run Club e o Strava que priorizam:
 
-Padrões utilizados nesses apps
-
-Tema escuro
-Métricas grandes
+Métricas claras
 Mapas interativos
 Gamificação da corrida
+Tema escuro com alto contraste
 
 ---
 
-# 🚀 Objetivo do Design
+# 🚀 Objetivo do Sistema
 
-Criar uma experiência que combine
+Criar uma experiência onde **corrida + território + competição** formem um loop de motivação contínua.
 
-atividade física
-competição
-visualização territorial
-gamificação
-
-transformando corridas em uma disputa territorial no mapa.
