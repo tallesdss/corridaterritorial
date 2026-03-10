@@ -220,7 +220,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 11. [ ] Tela Profile (Perfil)
+### 11. [x] Tela Profile (Perfil)
 
 **Rota:** `/profile`
 

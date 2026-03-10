@@ -5,6 +5,7 @@ import 'home_screen.dart';
 import 'community_screen.dart';
 import 'activity_screen.dart';
 import 'progress_screen.dart';
+import 'profile_screen.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -21,7 +22,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     const CommunityScreen(),
     const ActivityScreen(),
     const ProgressScreen(),
-    const Center(child: Text('Profile Screen (Em breve)', style: TextStyle(color: Colors.white))),
+    const ProfileScreen(),
   ];
 
   @override

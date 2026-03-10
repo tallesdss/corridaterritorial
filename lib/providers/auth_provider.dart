@@ -36,6 +36,16 @@ class AuthNotifier extends Notifier<AsyncValue<UserModel?>> {
      await ref.read(mockAuthServiceProvider).resetPassword(email);
   }
 
+  Future<void> updateProfile({String? name, String? profilePicture}) async {
+    final currentUser = state.value;
+    if (currentUser != null) {
+      state = AsyncValue.data(currentUser.copyWith(
+        name: name,
+        profilePicture: profilePicture,
+      ));
+    }
+  }
+
   Future<void> logOut() async {
     state = const AsyncValue.loading();
     await ref.read(mockAuthServiceProvider).logOut();
