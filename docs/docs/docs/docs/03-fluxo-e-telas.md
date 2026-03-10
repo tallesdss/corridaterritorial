@@ -191,7 +191,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 9. [ ] Tela Activity (Histórico)
+### 9. [x] Tela Activity (Histórico)
 
 **Rota:** `/activity`
 

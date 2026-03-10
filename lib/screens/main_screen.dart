@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../theme/app_colors.dart';
 import 'home_screen.dart';
 import 'community_screen.dart';
+import 'activity_screen.dart';
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
@@ -16,7 +17,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const CommunityScreen(),
-    const Center(child: Text('Activity Screen (Em breve)', style: TextStyle(color: Colors.white))),
+    const ActivityScreen(),
     const Center(child: Text('Progress Screen (Em breve)', style: TextStyle(color: Colors.white))),
     const Center(child: Text('Profile Screen (Em breve)', style: TextStyle(color: Colors.white))),
   ];
