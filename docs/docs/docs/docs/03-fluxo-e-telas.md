@@ -205,7 +205,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 
 ---
 
-### 10. [ ] Tela Progress (Progresso)
+### 10. [x] Tela Progress (Progresso)
 
 **Rota:** `/progress`
 

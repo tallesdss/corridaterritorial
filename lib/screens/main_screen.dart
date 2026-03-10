@@ -4,6 +4,8 @@ import '../theme/app_colors.dart';
 import 'home_screen.dart';
 import 'community_screen.dart';
 import 'activity_screen.dart';
+import 'progress_screen.dart';
+
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
@@ -18,7 +20,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     const HomeScreen(),
     const CommunityScreen(),
     const ActivityScreen(),
-    const Center(child: Text('Progress Screen (Em breve)', style: TextStyle(color: Colors.white))),
+    const ProgressScreen(),
     const Center(child: Text('Profile Screen (Em breve)', style: TextStyle(color: Colors.white))),
   ];
 
