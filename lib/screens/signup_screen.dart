@@ -32,25 +32,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
     setState(() => _isLoading = true);
     await ref.read(authProvider.notifier).signUp(name, email, password);
-    final authState = ref.read(authProvider);
+    
+    if (!mounted) return;
 
-    if (mounted) {
-      setState(() => _isLoading = false);
-      if (authState.hasError) {
-         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(
-               content: Text(authState.error.toString()),
-               backgroundColor: AppColors.error,
-           ),
-         );
-      } else {
-         ScaffoldMessenger.of(context).showSnackBar(
-           const SnackBar(
-               content: Text('Cadastro concluído!'),
-               backgroundColor: AppColors.success,
-           ),
-         );
-      }
+    final authState = ref.read(authProvider);
+    setState(() => _isLoading = false);
+
+    if (authState.hasError) {
+       ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(
+             content: Text(authState.error.toString()),
+             backgroundColor: AppColors.error,
+         ),
+       );
+    } else {
+       context.go('/');
     }
   }
 
@@ -68,7 +64,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: BackButton(onPressed: () => context.pop()),
+        leading: BackButton(onPressed: () {
+          if (context.canPop()) context.pop();
+        }),
       ),
       body: SafeArea(
         child: SingleChildScrollView(

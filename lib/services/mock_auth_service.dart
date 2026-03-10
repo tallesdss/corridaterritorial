@@ -3,17 +3,14 @@ import 'dart:async';
 
 class MockAuthService {
   Future<UserModel> signIn(String email, String password) async {
-    await Future.delayed(const Duration(seconds: 1)); // Simulate network
-    if (email == 'user@test.com' && password == 'password123') {
-      return UserModel(
-        id: 'user_1',
-        name: 'Runner Zero',
-        email: email,
-        level: 5,
-        totalDistanceMetres: 120500,
-      );
-    }
-    throw Exception('Credenciais inválidas');
+    await Future.delayed(const Duration(milliseconds: 500)); // Pequeno delay para UX
+    return UserModel(
+      id: 'user_${DateTime.now().millisecondsSinceEpoch}',
+      name: 'Corredor Convidado',
+      email: email,
+      level: 1,
+      totalDistanceMetres: 0,
+    );
   }
 
   Future<UserModel> signUp(String name, String email, String password) async {

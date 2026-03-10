@@ -30,25 +30,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     setState(() => _isLoading = true);
     await ref.read(authProvider.notifier).signIn(email, password);
-    final authState = ref.read(authProvider);
+    
+    if (!mounted) return;
 
-    if (mounted) {
-      setState(() => _isLoading = false);
-      if (authState.hasError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-             content: Text(authState.error.toString()),
-             backgroundColor: AppColors.error,
-          ),
-        );
-      } else {
-         ScaffoldMessenger.of(context).showSnackBar(
-           const SnackBar(
-               content: Text('Login com sucesso!'),
-               backgroundColor: AppColors.success,
-           ),
-         );
-      }
+    final authState = ref.read(authProvider);
+    setState(() => _isLoading = false);
+
+    if (authState.hasError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+           content: Text(authState.error.toString()),
+           backgroundColor: AppColors.error,
+        ),
+      );
+    } else {
+       context.go('/');
     }
   }
 
@@ -65,7 +61,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: BackButton(onPressed: () => context.pop()),
+        leading: BackButton(onPressed: () {
+          if (context.canPop()) context.pop();
+        }),
       ),
       body: SafeArea(
         child: Padding(

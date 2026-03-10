@@ -41,13 +41,13 @@ class OnboardingScreen extends StatelessWidget {
               const Spacer(),
               // CTA Button
               ElevatedButton(
-                onPressed: () => context.go('/signup'),
+                onPressed: () => context.push('/signup'),
                 child: const Text('Começar a Correr'),
               ),
               const SizedBox(height: 16),
               // Login Link
               OutlinedButton(
-                onPressed: () => context.go('/login'),
+                onPressed: () => context.push('/login'),
                 style: OutlinedButton.styleFrom(
                   side: BorderSide.none,
                 ),
