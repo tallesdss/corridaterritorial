@@ -156,7 +156,8 @@ O fluxo de autenticação funciona **100% local** com dados mockados:
 
 ---
 
-## 📌 Notas
+## 📌 Notas (01)
+
 
 - A separação em **Services** e **Providers** garante que a troca para backend real seja simples
 - Todos os mock services ficam na pasta `services/` com prefixo `mock_`
