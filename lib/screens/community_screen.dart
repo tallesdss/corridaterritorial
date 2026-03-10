@@ -6,7 +6,14 @@ import '../theme/app_colors.dart';
 
 enum RankingFilter { territory, distance, achievements }
 
-final rankingFilterProvider = StateProvider<RankingFilter>((ref) => RankingFilter.territory);
+class RankingFilterNotifier extends Notifier<RankingFilter> {
+  @override
+  RankingFilter build() => RankingFilter.territory;
+
+  void setFilter(RankingFilter filter) => state = filter;
+}
+
+final rankingFilterProvider = NotifierProvider<RankingFilterNotifier, RankingFilter>(RankingFilterNotifier.new);
 
 final rankingFutureProvider = FutureProvider<List<RankedUserModel>>((ref) async {
   final filter = ref.watch(rankingFilterProvider);
@@ -20,7 +27,6 @@ final rankingFutureProvider = FutureProvider<List<RankedUserModel>>((ref) async 
     case RankingFilter.achievements:
       return service.getRankingByAchievements();
   }
-  throw StateError('Unreachable');
 });
 
 class CommunityScreen extends ConsumerWidget {
@@ -85,7 +91,7 @@ class CommunityScreen extends ConsumerWidget {
               label: 'Territórios', 
               icon: Icons.map,
               isSelected: currentFilter == RankingFilter.territory,
-              onTap: () => ref.read(rankingFilterProvider.notifier).state = RankingFilter.territory,
+              onTap: () => ref.read(rankingFilterProvider.notifier).setFilter(RankingFilter.territory),
             ),
             const SizedBox(width: 8),
             _buildChip(
@@ -93,7 +99,7 @@ class CommunityScreen extends ConsumerWidget {
               label: 'Distância', 
               icon: Icons.directions_run,
               isSelected: currentFilter == RankingFilter.distance,
-              onTap: () => ref.read(rankingFilterProvider.notifier).state = RankingFilter.distance,
+              onTap: () => ref.read(rankingFilterProvider.notifier).setFilter(RankingFilter.distance),
             ),
             const SizedBox(width: 8),
             _buildChip(
@@ -101,7 +107,7 @@ class CommunityScreen extends ConsumerWidget {
               label: 'Conquistas', 
               icon: Icons.emoji_events,
               isSelected: currentFilter == RankingFilter.achievements,
-              onTap: () => ref.read(rankingFilterProvider.notifier).state = RankingFilter.achievements,
+              onTap: () => ref.read(rankingFilterProvider.notifier).setFilter(RankingFilter.achievements),
             ),
           ],
         ),
