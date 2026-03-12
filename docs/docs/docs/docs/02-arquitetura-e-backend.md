@@ -10,7 +10,7 @@ Este documento detalha **COMO** o sistema é construído tecnicamente no **front
 - Saber quais mock services existem e como substituí-los por backend real no futuro
 - Orientar decisões de arquitetura para novas funcionalidades
 
-> ⚠️ **100% Frontend:** Nesta fase, não há backend real. Todos os dados vêm de **mock services** locais que poderão ser substituídos por integrações reais (Supabase, Firebase, etc.) no futuro.
+> 🟢 **Backend Híbrido:** Nesta fase, a **Autenticação** já está integrada ao **Supabase Auth**. Outras funcionalidades (corridas, territórios, ranking) ainda utilizam **mock services** locais, sendo substituídas gradualmente conforme o plano de migração.
 
 ---
 
@@ -36,7 +36,7 @@ Este documento detalha **COMO** o sistema é construído tecnicamente no **front
 └─────────────────────────────────────┘
 ```
 
-> 💡 No futuro, a camada **Mock Services** será substituída por **serviços reais** que se comunicam com um backend, sem alterar UI ou Providers.
+> 💡 A camada de **Autenticação** já foi migrada para o **Supabase**. As demais camadas de **Services** (Runs, Territories, Ranking) serão migradas nas próximas fases.
 
 ---
 
@@ -47,9 +47,9 @@ Este documento detalha **COMO** o sistema é construído tecnicamente no **front
 | **UI**       | `screens/`      | Telas completas do aplicativo                           |
 | **Widgets**  | `widgets/`      | Componentes reutilizáveis (cards, botões, métricas)     |
 | **Estado**   | `providers/`    | Gerenciamento de estado global com Riverpod             |
-| **Serviços** | `services/`     | Mock services (substituíveis por backend no futuro)     |
+| **Serviços** | `services/`     | Implementações reais (Supabase) e Mock services         |
 | **Modelos**  | `models/`       | Classes de dados (User, Run, Territory)                 |
-| **Mocks**    | `mocks/`        | Dados mockados estáticos para simular backend           |
+| **Mocks**    | `mocks/`        | Dados mockados estáticos (em transição para DB)         |
 | **Rotas**    | `routes/`       | Configuração de navegação com GoRouter                  |
 | **Tema**     | `theme/`        | Cores, tipografia e estilos do Design System            |
 
@@ -113,16 +113,16 @@ Este documento detalha **COMO** o sistema é construído tecnicamente no **front
 
 Cada service possui uma interface que pode ser substituída por uma implementação real:
 
-### `MockAuthService`
-| Método                  | Comportamento Mockado                              | Substituição Futura          |
+### `SupabaseAuthService` (Real)
+| Método                  | Comportamento Real                                | Observação                  |
 |------------------------|---------------------------------------------------|------------------------------|
-| `signUp(email, pass)`  | Cria usuário local e retorna sucesso               | `supabase.auth.signUp()`     |
-| `signIn(email, pass)`  | Valida contra dados mockados e retorna usuário     | `supabase.auth.signIn()`     |
-| `signOut()`            | Limpa estado local                                 | `supabase.auth.signOut()`    |
-| `resetPassword(email)` | Simula envio com delay e retorna sucesso          | `supabase.auth.resetPassword()` |
-| `currentUser`          | Retorna usuário mockado se "logado"                | `supabase.auth.currentUser`  |
+| `signUp(email, pass)`  | Cria usuário no Supabase Auth                     | Metadata 'display_name'      |
+| `signIn(email, pass)`  | Autentica no Supabase e retorna JWT               | Persistência automática      |
+| `signOut()`            | Encerra sessão no Supabase                        | Limpa AuthProvider           |
+| `resetPassword(email)` | Dispara e-mail de recuperação real                | Via Supabase SMTP            |
+| `onAuthStateChanged`   | Stream de mudanças na sessão                      | Escutado pelo Provider       |
 
-### `MockRunService`
+### `MockRunService` (Ainda mockado)
 | Método                  | Comportamento Mockado                              | Substituição Futura          |
 |------------------------|---------------------------------------------------|------------------------------|
 | `getRuns(userId)`      | Retorna lista de corridas fictícias                | Query tabela `runs`          |
@@ -142,17 +142,17 @@ Cada service possui uma interface que pode ser substituída por uma implementaç
 
 ---
 
-## 🔑 Autenticação (Mockada)
+## 🔑 Autenticação (Real)
 
-O fluxo de autenticação funciona **100% local** com dados mockados:
+O fluxo de autenticação foi migrado para o **Supabase Auth**:
 
-1. **Cadastro** — Salva dados localmente e simula validação
-2. **Login** — Valida e-mail/senha contra dados mockados, gera sessão local
-3. **Recuperação de Senha** — Exibe UI completa, simula envio com delay
-4. **Sessão** — Gerenciada via Riverpod StateProvider (persistência em memória)
-5. **Logout** — Limpa estado e redireciona para Login
+1. **Cadastro** — Cria registro no Supabase Auth e dispara trigger para criar perfil em `public.profiles`.
+2. **Login** — Autenticação nativa com persistência de sessão (JWT).
+3. **Recuperação de Senha** — Envio de link real via serviço de e-mail do Supabase.
+4. **Sessão** — Gerenciada pelo `AuthProvider` que escuta o `onAuthStateChange`.
+5. **Logout** — Desloga do Firebase/Supabase e retorna à tela de Login.
 
-> 💡 No futuro, basta trocar `MockAuthService` por `SupabaseAuthService` sem alterar nenhuma tela.
+> 💡 A UI e os Providers não precisaram de grandes alterações devido à abstração da interface `AuthService`.
 
 ---
 

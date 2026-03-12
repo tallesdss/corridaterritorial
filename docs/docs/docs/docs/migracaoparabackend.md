@@ -26,14 +26,15 @@ Configuração das ferramentas base e ambiente de nuvem.
 ## 🔐 Fase 1: Autenticação Real
 Substituição do `MockAuthService` pelo Supabase Auth.
 
-- [ ] **Migração de Fluxo de Auth:**
-    - [ ] Implementar `SupabaseAuthService` herdando da interface base.
-    - [ ] Login com E-mail/Senha nativo do Supabase.
-    - [ ] Implementar Recuperação de Senha via link de e-mail (Deep Link).
-- [ ] **Persistência de Sessão:**
-    - [ ] Garantir que o `AuthProvider` escute o stream de estado da sessão do Supabase.
-- [ ] **Criação de Perfis Automática:**
-    - [ ] Configurar Trigger no Postgres para criar uma entrada na tabela `profiles` sempre que um novo usuário for criado no Auth.
+- [x] **Migração de Fluxo de Auth:**
+    - [x] Implementar `SupabaseAuthService` herdando da interface base.
+    - [x] Login com E-mail/Senha nativo do Supabase.
+    - [x] Implementar Recuperação de Senha via link de e-mail (Deep Link).
+- [x] **Persistência de Sessão:**
+    - [x] Garantir que o `AuthProvider` escute o stream de estado da sessão do Supabase.
+- [x] **Criação de Perfis Automática:**
+    - [x] Configurar Trigger no Postgres para criar uma entrada na tabela `profiles` sempre que um novo usuário for criado no Auth.
+
 
 ---
 

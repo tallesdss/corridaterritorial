@@ -11,7 +11,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 - Planejar a implementação de novas telas e transições
 - Servir como referência para designers e desenvolvedores
 
-> ⚠️ **Dados Mockados:** Todas as telas consomem dados de **mock services** locais. Nenhuma tela depende de backend real. Os mockups poderão ser substituídos por dados reais no futuro.
+> 🟢 **Dados Reais (Auth):** A autenticação (Login, Cadastro, Recuperação de Senha) já consome dados reais via **Supabase**. As demais telas ainda dependem de **mock services** locais que serão migrados nas fases seguintes.
 
 ---
 
@@ -25,7 +25,7 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
                            │
               ┌────────────▼────────────┐
               │  Usuário autenticado?   │
-              │  (estado local mockado) │
+              │  (Supabase Auth Session) │
               └────────────┬────────────┘
                      Não / │ \ Sim
                       ┌────┘  └────┐
@@ -74,16 +74,16 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 |-------------------|------------------------------------------------|
 | Campo E-mail       | Input para e-mail do usuário                   |
 | Campo Senha        | Input para senha (com toggle de visibilidade)  |
-| Botão "Entrar"     | Valida com MockAuthService → redireciona para **Home** |
+| Botão "Entrar"     | Autentica via SupabaseAuthService → redireciona para **Home** |
 | Link "Esqueci minha senha" | Leva para **Recuperar Senha**          |
 | Link "Criar conta" | Leva para **Cadastro**                        |
 
 **Fluxos:**
-- Login com sucesso (mockado) → **Home**
-- Senha incorreta → Exibe mensagem de erro (validação local)
+- Login com sucesso (Real) → **Home**
+- Credenciais inválidas → Mensagem de erro do Supabase
 - "Esqueci minha senha" → **Recuperar Senha**
 
-**Dados:** MockAuthService valida credenciais contra dados mockados locais.
+**Dados:** SupabaseAuthService valida credenciais no backend real.
 
 ---
 
@@ -97,10 +97,10 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 | Campo E-mail       | E-mail para cadastro                           |
 | Campo Senha        | Senha com requisitos mínimos                   |
 | Campo Confirmar Senha | Confirmação de senha                        |
-| Botão "Cadastrar"  | Cria conta local (mockada) → redireciona para **Home** |
+| Botão "Cadastrar"  | Cria conta no Supabase (Real) → redireciona para **Home** |
 | Link "Já tenho conta" | Volta para **Login**                        |
 
-**Dados:** MockAuthService cria usuário localmente.
+**Dados:** SupabaseAuthService cria usuário no auth.users e trigger cria `profiles`.
 
 ---
 
@@ -111,11 +111,11 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 | Componente         | Descrição                                      |
 |-------------------|------------------------------------------------|
 | Campo E-mail       | E-mail cadastrado                              |
-| Botão "Enviar"     | Simula envio de e-mail (delay mockado)         |
-| Mensagem de sucesso | Confirma que o "e-mail foi enviado" (mockado) |
+| Botão "Enviar"     | Dispara e-mail de recuperação real via Supabase |
+| Mensagem de sucesso | Confirma que o e-mail foi enviado |
 | Link "Voltar"      | Retorna para **Login**                         |
 
-**Dados:** MockAuthService simula envio com delay e retorna sucesso.
+**Dados:** SupabaseAuthService dispara processo de reset Password.
 
 ---
 
@@ -230,10 +230,10 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 | Nome do corredor     | Nome de exibição                               |
 | Estatísticas         | Total de corridas, distância, territórios (mockados) |
 | Botão "Editar Perfil" | Permite editar nome e avatar (salvo localmente) |
-| Botão "Logout"       | Limpa estado local → Volta para **Login**      |
+| Botão "Logout"       | Signout do Supabase → Volta para **Login**      |
 | Configurações        | Preferências do app                            |
 
-**Dados:** MockAuthService fornece dados do usuário mockado.
+**Dados:** AuthService fornece dados do usuário autenticado.
 
 ---
 
