@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/run_model.dart';
-import '../services/mock_run_service.dart';
+import '../services/supabase_run_service.dart';
 
-final mockRunServiceProvider = Provider<MockRunService>((ref) {
-  return MockRunService();
+final runServiceProvider = Provider<SupabaseRunService>((ref) {
+  return SupabaseRunService();
 });
 
 final runsProvider = FutureProvider<List<RunModel>>((ref) async {
-  final service = ref.watch(mockRunServiceProvider);
+  final service = ref.watch(runServiceProvider);
   return service.getRuns();
 });

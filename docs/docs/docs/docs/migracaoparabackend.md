@@ -57,13 +57,13 @@ Design do banco de dados e políticas de segurança (RLS).
 ## 🏃 Fase 3: Persistência de Corridas e Mapa
 Transformar a atividade local em dados persistentes e globais.
 
-- [ ] **Salvamento de Trajeto:**
-    - [ ] Conversão da lista de `LatLng` da corrida em formato PostGIS ou GeoJSON para armazenamento duradouro.
-- [ ] **Otimização de Trajeto:**
-    - [ ] Implementar algoritmo RDP (Ramer-Douglas-Peucker) no frontend antes de enviar para o backend (redução de pontos).
-- [ ] **Integração Real de Mapa:**
-    - [ ] Substituir polylines mockadas por renderização de dados vindos do banco.
-    - [ ] Implementar carregamento de territórios visíveis por "Bounding Box" (carregar apenas o que está na tela).
+- [x] **Salvamento de Trajeto:**
+    - [x] Conversão da lista de `LatLng` da corrida em formato PostGIS ou GeoJSON para armazenamento duradouro.
+- [x] **Otimização de Trajeto:**
+    - [x] Implementar algoritmo RDP (Ramer-Douglas-Peucker) no frontend antes de enviar para o backend (redução de pontos).
+- [x] **Integração Real de Mapa:**
+    - [x] Substituir polylines mockadas por renderização de dados vindos do banco.
+    - [x] Implementar carregamento de territórios visíveis por "Bounding Box" (carregar apenas o que está na tela).
 
 ---
 
