@@ -33,19 +33,27 @@ class AuthNotifier extends Notifier<AsyncValue<UserModel?>> {
     state = const AsyncValue.loading();
     try {
       final user = await ref.read(authServiceProvider).signIn(email, password);
-      state = AsyncValue.data(user);
+      // O stream onAuthStateChanged cuidará de atualizar o estado se o login for bem-sucedido.
+      // Mas se o signIn retornar e não houver usuário, as vezes é um erro silencioso ou estado não confirmado.
+      if (user == null) {
+        state = const AsyncValue.data(null);
+      }
     } catch (e, st) {
       state = AsyncValue.error(e, st);
+      rethrow;
     }
   }
 
   Future<void> signUp(String name, String email, String password) async {
     state = const AsyncValue.loading();
     try {
-      final user = await ref.read(authServiceProvider).signUp(name, email, password);
-      state = AsyncValue.data(user);
+      await ref.read(authServiceProvider).signUp(name, email, password);
+      // No caso de signUp, se a confirmação de email for necessária, o usuário não estará logado ainda.
+      // O estado continuará como null (via stream) ou podemos setar explicitamente.
+      state = const AsyncValue.data(null); 
     } catch (e, st) {
       state = AsyncValue.error(e, st);
+      rethrow;
     }
   }
 

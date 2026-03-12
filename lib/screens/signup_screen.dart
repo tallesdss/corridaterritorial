@@ -32,22 +32,46 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     }
 
     setState(() => _isLoading = true);
-    await ref.read(authProvider.notifier).signUp(name, email, password);
-    
-    if (!mounted) return;
+    try {
+      await ref.read(authProvider.notifier).signUp(name, email, password);
+      
+      if (!mounted) return;
+      
+      // Se chegamos aqui, o cadastro foi solicitado com sucesso.
+      // Como o estado do authProvider (stream) ainda será null (esperando confirmação),
+      // mostramos uma mensagem instrutiva.
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Conta criada! Verifique seu e-mail para confirmar o cadastro.'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 5),
+        ),
+      );
+      
+      // Opcionalmente voltamos para o login
+      context.pop();
+    } catch (e) {
+      if (!mounted) return;
 
-    final authState = ref.read(authProvider);
-    setState(() => _isLoading = false);
+      String errorMessage = 'Ocorreu um erro ao criar conta.';
+      final errorStr = e.toString().toLowerCase();
 
-    if (authState.hasError) {
-       ScaffoldMessenger.of(context).showSnackBar(
-         SnackBar(
-             content: Text(authState.error.toString()),
-             backgroundColor: AppColors.error,
-         ),
-       );
-    } else {
-       context.go('/');
+      if (errorStr.contains('user already exists')) {
+        errorMessage = 'Este e-mail já está cadastrado.';
+      } else if (errorStr.contains('weak password')) {
+        errorMessage = 'A senha é muito fraca.';
+      } else {
+        errorMessage = e.toString();
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(errorMessage),
+            backgroundColor: AppColors.error,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 

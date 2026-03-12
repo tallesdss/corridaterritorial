@@ -30,22 +30,34 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     setState(() => _isLoading = true);
-    await ref.read(authProvider.notifier).signIn(email, password);
-    
-    if (!mounted) return;
+    try {
+      await ref.read(authProvider.notifier).signIn(email, password);
+      // Se chegou aqui sem erro, o redirect do router deve cuidar do resto
+      // mas podemos forçar se necessário.
+    } catch (e) {
+      if (!mounted) return;
+      
+      String errorMessage = 'Ocorreu um erro ao entrar.';
+      final errorStr = e.toString().toLowerCase();
+      
+      if (errorStr.contains('invalid login credentials')) {
+        errorMessage = 'Email ou senha incorretos.';
+      } else if (errorStr.contains('email not confirmed')) {
+        errorMessage = 'Email não confirmado. Por favor, verifique sua caixa de entrada.';
+      } else if (errorStr.contains('network')) {
+        errorMessage = 'Erro de conexão. Verifique sua internet.';
+      } else {
+        errorMessage = e.toString();
+      }
 
-    final authState = ref.read(authProvider);
-    setState(() => _isLoading = false);
-
-    if (authState.hasError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-           content: Text(authState.error.toString()),
+           content: Text(errorMessage),
            backgroundColor: AppColors.error,
         ),
       );
-    } else {
-       context.go('/');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
