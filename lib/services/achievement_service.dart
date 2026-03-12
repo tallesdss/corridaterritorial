@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/achievement_model.dart';
-import '../services/auth_service.dart';
+import '../providers/auth_provider.dart';
 
 final achievementServiceProvider = Provider((ref) {
-  return AchievementService(Supabase.instance.client, ref.watch(authProvider));
+  final authState = ref.watch(authProvider);
+  return AchievementService(Supabase.instance.client, authState.value?.id);
 });
 
 class AchievementService {
   final SupabaseClient _supabase;
-  final User? _user;
+  final String? _userId;
 
-  AchievementService(this._supabase, this._user);
+  AchievementService(this._supabase, this._userId);
 
   Future<List<AchievementModel>> getAchievements() async {
-    if (_user == null) {
+    if (_userId == null) {
       return [];
     }
 
@@ -26,7 +27,7 @@ class AchievementService {
     final userAchievementsResponse = await _supabase
         .from('user_achievements')
         .select()
-        .eq('user_id', _user.id);
+        .eq('user_id', _userId);
 
     final userAchievementsMap = {
       for (var item in userAchievementsResponse)

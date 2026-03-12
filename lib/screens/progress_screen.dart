@@ -333,92 +333,119 @@ class ProgressScreen extends ConsumerWidget {
   }
 
   Widget _buildAchievements(BuildContext context, WidgetRef ref) {
-    final achievements = ref.watch(achievementsProvider);
-    final unlockedAchievements = achievements.where((a) => a.isUnlocked).toList();
+    final achievementsAsync = ref.watch(achievementsFutureProvider);
+    
+    return achievementsAsync.when(
+      data: (achievements) {
+        final unlockedAchievements = achievements.where((a) => a.isUnlocked).toList();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Conquistas Recentes',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          color: AppColors.textPrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  TextButton(
+                    onPressed: () => context.push('/achievements'),
+                    child: const Text('Ver Tudo'),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            if (unlockedAchievements.isEmpty)
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundCard,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.borderDefault),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Nenhuma conquista ainda. Comece a correr!',
+                    style: TextStyle(color: AppColors.textMuted),
+                  ),
+                ),
+              )
+            else
+              SizedBox(
+                height: 100,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: unlockedAchievements.length,
+                  itemBuilder: (context, index) {
+                    final achievement = unlockedAchievements[index];
+                    return Container(
+                      width: 90,
+                      margin: const EdgeInsets.only(right: 16),
+                      decoration: BoxDecoration(
+                        color: AppColors.backgroundCard,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.borderDefault),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            achievement.icon,
+                            color: achievement.color,
+                            size: 32,
+                          ),
+                          const SizedBox(height: 8),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Text(
+                              achievement.title,
+                              textAlign: TextAlign.center,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+          ],
+        );
+      },
+      loading: () => _buildAchievementsShimmer(),
+      error: (e, st) => const SizedBox.shrink(),
+    );
+  }
 
+  Widget _buildAchievementsShimmer() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Conquistas Recentes',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              TextButton(
-                onPressed: () => context.push('/achievements'),
-                child: const Text('Ver Tudo'),
-              ),
-            ],
+        const AppShimmer(width: 150, height: 24),
+        const SizedBox(height: 16),
+        SizedBox(
+          height: 100,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 4,
+            itemBuilder: (context, index) => const Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: AppShimmer(width: 90, height: 100, borderRadius: 16),
+            ),
           ),
         ),
-        const SizedBox(height: 16),
-        if (unlockedAchievements.isEmpty)
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: AppColors.backgroundCard,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppColors.borderDefault),
-            ),
-            child: const Center(
-              child: Text(
-                'Nenhuma conquista ainda. Comece a correr!',
-                style: TextStyle(color: AppColors.textMuted),
-              ),
-            ),
-          )
-        else
-          SizedBox(
-            height: 100,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: unlockedAchievements.length,
-              itemBuilder: (context, index) {
-                final achievement = unlockedAchievements[index];
-                return Container(
-                  width: 90,
-                  margin: const EdgeInsets.only(right: 16),
-                  decoration: BoxDecoration(
-                    color: AppColors.backgroundCard,
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.borderDefault),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        achievement.icon,
-                        color: achievement.color,
-                        size: 32,
-                      ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Text(
-                          achievement.title,
-                          textAlign: TextAlign.center,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
       ],
     );
   }

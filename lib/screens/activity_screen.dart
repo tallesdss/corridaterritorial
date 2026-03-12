@@ -176,7 +176,7 @@ class _ActivityScreenState extends ConsumerState<ActivityScreen> {
               ),
               const SizedBox(height: 12),
               Text(
-                run.title,
+                run.title ?? 'Corrida',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,

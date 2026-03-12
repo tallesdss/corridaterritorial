@@ -12,7 +12,7 @@ class MockAuthService implements AuthService {
   UserModel? get currentUser => null;
 
   @override
-  Future<UserModel> signIn(String email, String password) async {
+  Future<UserModel?> signIn(String email, String password) async {
     await Future.delayed(const Duration(milliseconds: 500)); // Pequeno delay para UX
     final user = UserModel(
       id: 'user_${DateTime.now().millisecondsSinceEpoch}',
@@ -26,7 +26,7 @@ class MockAuthService implements AuthService {
   }
 
   @override
-  Future<UserModel> signUp(String name, String email, String password) async {
+  Future<UserModel?> signUp(String name, String email, String password) async {
     await Future.delayed(const Duration(seconds: 1));
     final user = UserModel(
       id: 'user_new',
@@ -46,6 +46,11 @@ class MockAuthService implements AuthService {
   @override
   Future<void> resetPassword(String email) async {
     await Future.delayed(const Duration(seconds: 1));
+  }
+
+  @override
+  Future<void> updateProfile({String? name, String? profilePicture}) async {
+    await Future.delayed(const Duration(milliseconds: 500));
   }
 }
 

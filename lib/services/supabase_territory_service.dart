@@ -1,5 +1,5 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../models/territory_model.dart';
 
 class SupabaseTerritoryService {
   final _supabase = Supabase.instance.client;
@@ -21,7 +21,7 @@ class SupabaseTerritoryService {
       );
       return List<Map<String, dynamic>>.from(response);
     } catch (e) {
-      print('Erro ao buscar territórios: $e');
+      debugPrint('Erro ao buscar territórios: $e');
       return [];
     }
   }
