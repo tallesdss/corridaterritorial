@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
+import '../providers/notification_provider.dart';
 import '../theme/app_colors.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -12,6 +13,45 @@ class HomeScreen extends ConsumerWidget {
     if (hour < 12) return 'Bom dia';
     if (hour < 18) return 'Boa tarde';
     return 'Boa noite';
+  }
+
+  Widget _buildNotificationAction(BuildContext context, WidgetRef ref) {
+    final unreadCount = ref.watch(unreadNotificationsCountProvider);
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.notifications_none_outlined, color: AppColors.textPrimary),
+          onPressed: () => context.push('/notifications'),
+        ),
+        if (unreadCount > 0)
+          Positioned(
+            top: 12,
+            right: 12,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: const BoxDecoration(
+                color: AppColors.primary,
+                shape: BoxShape.circle,
+              ),
+              constraints: const BoxConstraints(
+                minWidth: 16,
+                minHeight: 16,
+              ),
+              child: Text(
+                unreadCount.toString(),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 
   @override
@@ -49,10 +89,7 @@ class HomeScreen extends ConsumerWidget {
           error: (_, __) => const SizedBox.shrink(),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: AppColors.textPrimary),
-            onPressed: () {},
-          ),
+          _buildNotificationAction(context, ref),
           IconButton(
              icon: const Icon(Icons.logout, color: AppColors.textPrimary),
              onPressed: () {

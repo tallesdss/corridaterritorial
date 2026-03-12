@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
-import '../widgets/custom_text_field.dart';
+import '../widgets/common/app_button.dart';
+import '../widgets/common/app_input.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({super.key});
@@ -86,32 +87,34 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              CustomTextField(
+              AppInput(
                 controller: _nameController,
-                labelText: 'Nome Completo',
-                hintText: 'Runner Zero',
+                label: 'Nome Completo',
+                hint: 'Ex: Runner Zero',
+                icon: Icons.person_outline,
               ),
               const SizedBox(height: 16),
-              CustomTextField(
+              AppInput(
                 controller: _emailController,
-                labelText: 'Email',
-                hintText: 'seu@email.com',
+                label: 'Email',
+                hint: 'seu@email.com',
                 keyboardType: TextInputType.emailAddress,
+                icon: Icons.email_outlined,
               ),
               const SizedBox(height: 16),
-              CustomTextField(
-                 controller: _passwordController,
-                 labelText: 'Senha',
-                 hintText: 'Sua senha',
-                 obscureText: true,
+              AppInput(
+                controller: _passwordController,
+                label: 'Senha',
+                hint: 'Sua senha segura',
+                isPassword: true,
+                icon: Icons.lock_outline,
               ),
               const SizedBox(height: 32),
-              _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ElevatedButton(
-                      onPressed: _handleSignUp,
-                      child: const Text('Criar Conta'),
-                    ),
+              AppButton(
+                label: 'Criar Conta',
+                onPressed: _handleSignUp,
+                isLoading: _isLoading,
+              ),
               const SizedBox(height: 20),
             ],
           ),

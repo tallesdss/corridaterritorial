@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
-import '../widgets/custom_text_field.dart';
+import '../widgets/common/app_button.dart';
+import '../widgets/common/app_input.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -83,18 +84,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              CustomTextField(
+              AppInput(
                 controller: _emailController,
-                labelText: 'Email',
-                hintText: 'seu@email.com',
+                label: 'Email',
+                hint: 'seu@email.com',
                 keyboardType: TextInputType.emailAddress,
+                icon: Icons.email_outlined,
               ),
-              const SizedBox(height: 16),
-              CustomTextField(
-                 controller: _passwordController,
-                 labelText: 'Senha',
-                 hintText: 'Senha',
-                 obscureText: true,
+              const SizedBox(height: 20),
+              AppInput(
+                controller: _passwordController,
+                label: 'Senha',
+                hint: 'Sua senha secreta',
+                isPassword: true,
+                icon: Icons.lock_outline,
               ),
               const SizedBox(height: 8),
               Align(
@@ -105,12 +108,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
               const Spacer(),
-              _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ElevatedButton(
-                      onPressed: _handleLogin,
-                      child: const Text('Entrar'),
-                    ),
+              AppButton(
+                label: 'Entrar',
+                onPressed: _handleLogin,
+                isLoading: _isLoading,
+              ),
               const SizedBox(height: 20),
             ],
           ),

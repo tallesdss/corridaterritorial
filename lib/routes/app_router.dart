@@ -9,6 +9,10 @@ import '../screens/signup_screen.dart';
 import '../screens/recover_password_screen.dart';
 import '../screens/running_screen.dart';
 import '../screens/run_summary_screen.dart';
+import '../screens/achievements_screen.dart';
+import '../screens/notifications_screen.dart';
+import '../screens/settings_screen.dart';
+import '../screens/help_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -51,6 +55,22 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const RecoverPasswordScreen(),
       ),
       GoRoute(
+        path: '/achievements',
+        builder: (context, state) => const AchievementsScreen(),
+      ),
+      GoRoute(
+        path: '/notifications',
+        builder: (context, state) => const NotificationsScreen(),
+      ),
+      GoRoute(
+        path: '/settings',
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/help',
+        builder: (context, state) => const HelpScreen(),
+      ),
+      GoRoute(
         path: '/run',
         builder: (context, state) => const RunningScreen(),
         routes: [
@@ -63,3 +83,4 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
   );
 });
+

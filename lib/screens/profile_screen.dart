@@ -4,6 +4,10 @@ import '../providers/auth_provider.dart';
 import '../providers/run_provider.dart';
 import '../theme/app_colors.dart';
 import '../models/user_model.dart';
+import '../widgets/common/app_card.dart';
+import '../widgets/common/app_input.dart';
+import '../widgets/common/app_dialog.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -28,7 +32,7 @@ class ProfileScreen extends ConsumerWidget {
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
                     children: [
-                      _buildStats(user, runsState),
+                      _buildStats(context, user, runsState),
                       const SizedBox(height: 32),
                       _buildMenu(context, ref),
                     ],
@@ -60,7 +64,7 @@ class ProfileScreen extends ConsumerWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    AppColors.primary.withOpacity(0.2),
+                    AppColors.primary.withValues(alpha: 0.2),
                     AppColors.backgroundPrimary,
                   ],
                 ),
@@ -112,7 +116,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStats(UserModel user, AsyncValue runsState) {
+  Widget _buildStats(BuildContext context, UserModel user, AsyncValue runsState) {
     return runsState.when(
       data: (runs) {
         final totalRuns = runs.length;
@@ -123,9 +127,9 @@ class ProfileScreen extends ConsumerWidget {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _buildStatCard('Atividades', totalRuns.toString(), Icons.directions_run),
-            _buildStatCard('Km Totais', totalDistance.toStringAsFixed(1), Icons.map),
-            _buildStatCard('Territórios', totalTerritories.toString(), Icons.flag),
+            _buildStatCard(context, 'Atividades', totalRuns.toString(), Icons.directions_run),
+            _buildStatCard(context, 'Km Totais', totalDistance.toStringAsFixed(1), Icons.map),
+            _buildStatCard(context, 'Territórios', totalTerritories.toString(), Icons.flag),
           ],
         );
       },
@@ -134,16 +138,11 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatCard(String label, String value, IconData icon) {
+  Widget _buildStatCard(BuildContext context, String label, String value, IconData icon) {
     return Expanded(
-      child: Container(
+      child: AppCard(
         margin: const EdgeInsets.symmetric(horizontal: 4),
         padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-        decoration: BoxDecoration(
-          color: AppColors.backgroundSecondary,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.borderDefault),
-        ),
         child: Column(
           children: [
             Icon(icon, color: AppColors.primary, size: 24),
@@ -182,16 +181,12 @@ class ProfileScreen extends ConsumerWidget {
         _buildMenuItem(
           icon: Icons.settings,
           title: 'Configurações',
-          onTap: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Configurações em breve')),
-            );
-          },
+          onTap: () => context.push('/settings'),
         ),
         _buildMenuItem(
           icon: Icons.help_outline,
           title: 'Ajuda & Suporte',
-          onTap: () {},
+          onTap: () => context.push('/help'),
         ),
         const SizedBox(height: 16),
         _buildMenuItem(
@@ -213,13 +208,10 @@ class ProfileScreen extends ConsumerWidget {
     required VoidCallback onTap,
     Color? color,
   }) {
-    return Container(
+    return AppCard(
       margin: const EdgeInsets.only(bottom: 12),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundSecondary,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderDefault),
-      ),
+      padding: EdgeInsets.zero,
+      onTap: onTap,
       child: ListTile(
         leading: Icon(icon, color: color ?? AppColors.textPrimary),
         title: Text(
@@ -230,7 +222,6 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
         trailing: const Icon(Icons.chevron_right, color: AppColors.textMuted),
-        onTap: onTap,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     );
@@ -241,32 +232,24 @@ class ProfileScreen extends ConsumerWidget {
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: AppColors.backgroundSecondary,
-        title: const Text('Editar Perfil', style: TextStyle(color: AppColors.textPrimary)),
-        content: TextField(
-          controller: nameController,
-          decoration: const InputDecoration(
-            labelText: 'Nome',
-            labelStyle: TextStyle(color: AppColors.textSecondary),
-            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColors.primary)),
-          ),
-          style: const TextStyle(color: AppColors.textPrimary),
+      builder: (context) => AppDialog(
+        title: 'Editar Perfil',
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AppInput(
+              label: 'Nome',
+              hint: 'Seu nome de exibição',
+              controller: nameController,
+              icon: Icons.person_outline,
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar', style: TextStyle(color: AppColors.textSecondary)),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
-            onPressed: () {
-              ref.read(authProvider.notifier).updateProfile(name: nameController.text);
-              Navigator.pop(context);
-            },
-            child: const Text('Salvar', style: TextStyle(color: AppColors.textInverse)),
-          ),
-        ],
+        confirmLabel: 'Salvar',
+        onConfirm: () {
+          ref.read(authProvider.notifier).updateProfile(name: nameController.text);
+          Navigator.pop(context);
+        },
       ),
     );
   }

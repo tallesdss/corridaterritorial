@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_colors.dart';
+import '../widgets/territory_details_sheet.dart';
+import '../services/mock_territory_service.dart';
 
 class RunningScreen extends StatefulWidget {
   const RunningScreen({super.key});
@@ -129,6 +131,23 @@ class _RunningScreenState extends State<RunningScreen> {
                   ),
                 ]
               ],
+            ),
+          ),
+
+          // Territory Discovery Overlay (Simulated)
+          Positioned(
+            bottom: 120,
+            right: 16,
+            child: FloatingActionButton(
+              heroTag: 'btnTerritory',
+              onPressed: () {
+                TerritoryDetailsSheet.show(
+                  context, 
+                  MockTerritoryService.getMockTerritory(),
+                );
+              },
+              backgroundColor: AppColors.info,
+              child: const Icon(Icons.explore, color: Colors.white),
             ),
           ),
         ],

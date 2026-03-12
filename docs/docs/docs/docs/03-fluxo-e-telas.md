@@ -246,3 +246,75 @@ Este documento descreve a **jornada do usuário** dentro do aplicativo e detalha
 | Activity     | 🏃       | `/activity`     |
 | Progress     | 📊       | `/progress`     |
 | Profile      | 👤       | `/profile`      |
+
+---
+
+## 🚀 Etapas de Desenvolvimentos (Roadmap)
+
+Esta seção detalha os próximos passos para levar o Corrida Territorial de um MVP frontend para um produto completo e escalável.
+
+### 🗺️ Telas e Componentes em Falta
+
+Abaixo estão as interfaces e elementos visuais identificados como necessários para a versão completa:
+
+| Categoria | Item | Descrição |
+|-----------|------|-----------|
+| **Telas** | [x] Central de Notificações | Lista de conquistas, novos desafios e interações sociais. |
+| **Telas** | [x] Detalhes do Território | Informações sobre quem domina, histórico de disputas e área. |
+| **Telas** | Amizades & Perfil de Terceiros | Buscar amigos, ver perfil de outros corredores e rankings comparativos. |
+| **Telas** | [x] Detalhes de Conquistas | Galeria completa de medalhas com requisitos para desbloqueio. |
+| **Telas** | Configurações Avançadas | Voz da corrida (feedback áudio), unidades (km/mi), privacidade. |
+| **Componentes**| Design System (Buttons) | Botões padronizados (Primary, Secondary, Ghost, Disabled). |
+| **Componentes**| Design System (Cards) | Cards unificados para Corridas, Territórios e Usuários. |
+| **Componentes**| Feedbacks Visuais | Shimmer loading (esqueleto), Empty States e Diálogos de Sucesso. |
+| **Componentes**| Custom Map UI | Filtros de mapa (exibir só meus, áreas de guerra) e ícones customizados. |
+
+---
+
+### 🛤️ Jornada de Evolução
+
+---
+
+### 🛤️ Jornada de Evolução (Foco em Frontend)
+
+Como o projeto está focado 100% no **frontend com dados mockados**, as etapas seguem a evolução da UI, UX e lógica de cliente:
+
+#### Etapa 1: Design System & Padronização UI
+- [x] **Biblioteca de Widgets**: Criar pasta `lib/widgets/common/` com botões, cards e inputs padronizados.
+- [x] **Theming**: Configurar `ThemeData` completo (Colors, TextStyles) para evitar estilos "hardcoded".
+- [x] **Acessibilidade**: Revisar contrastes e tamanhos de fonte em todas as telas.
+- [x] **Feedback Visual**: Implementar Shimmer Loaders reais para simular o carregamento de dados dos Mock Services.
+
+#### Etapa 2: Lógica Avançada de Corrida (Client-Side)
+- [ ] **Engine de GPS**: Refinar a captura de coordenadas para filtrar ruídos do sensor (geolocalização).
+- [ ] **Feedback Sonoro**: Implementar player de som para avisos de "KM atingido" ou "Corrida Iniciada" (ativos locais).
+- [ ] **Auto-Pause Mobile**: Implementar lógica de detecção de velocidade para pausar o cronômetro localmente.
+- [ ] **Sobreposição de Mapa**: Melhorar a renderização do trajeto (Polyline) e marcadores customizados.
+
+#### Etapa 3: Interface de Gamificação (Telas Faltantes)
+- [x] **Galeria de Conquistas**: Implementar a tela detalhada de medalhas (badges) com estados de "Bloqueado/Desbloqueado".
+- [x] **Central de Notificações**: UI para simular recebimento de alertas de sistema e conquistas.
+- [x] **Detalhes de Território**: Criar o BottomSheet ou Tela que exibe informações sobre uma área clicada no mapa.
+
+#### Etapa 4: Expansão Social (UI & Mocks)
+- [ ] **Feed de Atividades**: Criar a lista de atividades global/amigos usando dados de `MockRunService`.
+- [ ] **Busca de Usuários**: Implementar interface de busca e perfis de terceiros (com dados mockados).
+- [ ] **Gerador de Compartilhamento**: Criar a lógica de capturar a tela (screenshot) do mapa e métricas para compartilhar nas redes.
+
+#### Etapa 5: Lógica de Negócio no Frontend
+- [ ] **Providers Robustos**: Refinar os `StateProviders` (Riverpod) para gerenciar estados complexos de filtragem no ranking e histórico.
+- [ ] **Cálculos Locais**: Implementar lógica de frontend para calcular estimativa de calorias e pace médio em tempo real.
+- [ ] **Persistência Local (Cache)**: Usar `shared_preferences` para salvar as configurações do usuário e o estado do onboarding localmente.
+
+#### Etapa 6: Polish & Experiência do Usuário (UX)
+- [ ] **Animações Lottie**: Adicionar animações suaves para vitórias de território e conquistas de badges.
+- [ ] **Empty States**: Criar ilustrações e mensagens para quando não houver histórico ou amigos.
+- [ ] **Transições de Rota**: Padronizar as transições do `GoRouter` (fade, slide) para uma sensação de app premium.
+
+#### Etapa 7: Validação & Build de Demonstração
+- [ ] **Mock Stress Test**: Garantir que o app se comporta bem com grandes volumes de dados mockados (ex: ranking com 100 nomes).
+- [ ] **Performance Profiling**: Otimizar o uso de memória em telas com muitos polígonos no Google Maps.
+- [ ] **Geração de APK/IPA**: Preparar a build para testes reais de campo (usando o app mockado na rua).
+
+
+

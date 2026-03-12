@@ -3,7 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../theme/app_colors.dart';
-import '../widgets/custom_text_field.dart';
+import '../widgets/common/app_button.dart';
+import '../widgets/common/app_input.dart';
+import '../widgets/common/app_dialog.dart';
 
 class RecoverPasswordScreen extends ConsumerStatefulWidget {
   const RecoverPasswordScreen({super.key});
@@ -30,13 +32,15 @@ class _RecoverPasswordScreenState extends ConsumerState<RecoverPasswordScreen> {
     
     if (mounted) {
        setState(() => _isLoading = false);
-       ScaffoldMessenger.of(context).showSnackBar(
-         const SnackBar(
-           content: Text('Email de recuperação enviado (simulado)'),
-           backgroundColor: AppColors.success,
-         ),
+       AppDialog.showSuccess(
+         context, 
+         title: 'Recuperação Enviada', 
+         message: 'Se o email informado estiver cadastrado, você receberá um link em breve.', 
+         onConfirm: () {
+           Navigator.pop(context); // Close dialog
+           context.pop(); // Go back to login
+         },
        );
-       context.pop();
     }
   }
 
@@ -72,19 +76,19 @@ class _RecoverPasswordScreenState extends ConsumerState<RecoverPasswordScreen> {
                 ),
               ),
               const SizedBox(height: 32),
-              CustomTextField(
+              AppInput(
                 controller: _emailController,
-                labelText: 'Email',
-                hintText: 'seu@email.com',
+                label: 'Email',
+                hint: 'seu@email.com',
                 keyboardType: TextInputType.emailAddress,
+                icon: Icons.email_outlined,
               ),
               const SizedBox(height: 32),
-              _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : ElevatedButton(
-                      onPressed: _handleRecover,
-                      child: const Text('Enviar Instruções'),
-                    ),
+              AppButton(
+                label: 'Enviar Instruções',
+                onPressed: _handleRecover,
+                isLoading: _isLoading,
+              ),
             ],
           ),
         ),

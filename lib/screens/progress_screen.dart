@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../providers/run_provider.dart';
+import '../providers/achievement_provider.dart';
+import '../providers/notification_provider.dart';
+import 'package:go_router/go_router.dart';
+import '../widgets/common/app_card.dart';
+import '../widgets/common/app_shimmer.dart';
 import '../theme/app_colors.dart';
 import '../models/run_model.dart';
 import 'dart:math';
@@ -25,6 +30,10 @@ class ProgressScreen extends ConsumerWidget {
         ),
         backgroundColor: AppColors.backgroundPrimary,
         elevation: 0,
+        actions: [
+          _buildNotificationAction(context, ref),
+          const SizedBox(width: 8),
+        ],
       ),
       body: runsAsync.when(
         data: (runs) => RefreshIndicator(
@@ -40,18 +49,23 @@ class ProgressScreen extends ConsumerWidget {
               const SizedBox(height: 24),
               _buildLevelProgress(context),
               const SizedBox(height: 24),
-              _buildAchievements(context),
+              _buildAchievements(context, ref),
               const SizedBox(height: 24),
             ],
           ),
         ),
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: AppColors.primary),
-        ),
+        loading: () => _buildLoadingShimmer(),
         error: (err, stack) => Center(
-          child: Text(
-            'Erro ao carregar progresso',
-            style: TextStyle(color: AppColors.error),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: AppColors.error),
+              const SizedBox(height: 16),
+              const Text(
+                'Erro ao carregar progresso',
+                style: TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
         ),
       ),
@@ -77,13 +91,8 @@ class ProgressScreen extends ConsumerWidget {
     double maxKm = data.reduce(max);
     if (maxKm < 5) maxKm = 5;
 
-    return Container(
+    return AppCard(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundCard,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.borderDefault),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -213,13 +222,8 @@ class ProgressScreen extends ConsumerWidget {
   }
 
   Widget _buildMetricCard(String label, String value, IconData icon) {
-    return Container(
+    return AppCard(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundCard,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderDefault),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -247,13 +251,8 @@ class ProgressScreen extends ConsumerWidget {
   }
 
   Widget _buildLevelProgress(BuildContext context) {
-    return Container(
+    return AppCard(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: AppColors.backgroundCard,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: AppColors.borderDefault),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -299,64 +298,160 @@ class ProgressScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAchievements(BuildContext context) {
-    final achievements = [
-      {'icon': Icons.flash_on, 'title': 'Veloz', 'color': Colors.orange},
-      {'icon': Icons.timer, 'title': 'Consistente', 'color': Colors.blue},
-      {'icon': Icons.map, 'title': 'Explorador', 'color': Colors.green},
-      {'icon': Icons.emoji_events, 'title': 'Campeão', 'color': Colors.amber},
-    ];
+  Widget _buildNotificationAction(BuildContext context, WidgetRef ref) {
+    final unreadCount = ref.watch(unreadNotificationsCountProvider);
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        IconButton(
+          icon: const Icon(Icons.notifications_none_outlined, color: AppColors.textPrimary),
+          onPressed: () => context.push('/notifications'),
+        ),
+        if (unreadCount > 0)
+          Positioned(
+            top: 12,
+            right: 12,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: const BoxDecoration(
+                color: AppColors.primary,
+                shape: BoxShape.circle,
+              ),
+              child: Text(
+                unreadCount.toString(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 8,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildAchievements(BuildContext context, WidgetRef ref) {
+    final achievements = ref.watch(achievementsProvider);
+    final unlockedAchievements = achievements.where((a) => a.isUnlocked).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: Text(
-            'Conquistas Recentes',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: AppColors.textPrimary,
-                  fontWeight: FontWeight.bold,
-                ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Conquistas Recentes',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: AppColors.textPrimary,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              TextButton(
+                onPressed: () => context.push('/achievements'),
+                child: const Text('Ver Tudo'),
+              ),
+            ],
           ),
         ),
+        const SizedBox(height: 16),
+        if (unlockedAchievements.isEmpty)
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppColors.backgroundCard,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppColors.borderDefault),
+            ),
+            child: const Center(
+              child: Text(
+                'Nenhuma conquista ainda. Comece a correr!',
+                style: TextStyle(color: AppColors.textMuted),
+              ),
+            ),
+          )
+        else
+          SizedBox(
+            height: 100,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: unlockedAchievements.length,
+              itemBuilder: (context, index) {
+                final achievement = unlockedAchievements[index];
+                return Container(
+                  width: 90,
+                  margin: const EdgeInsets.only(right: 16),
+                  decoration: BoxDecoration(
+                    color: AppColors.backgroundCard,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: AppColors.borderDefault),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        achievement.icon,
+                        color: achievement.color,
+                        size: 32,
+                      ),
+                      const SizedBox(height: 8),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Text(
+                          achievement.title,
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingShimmer() {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        const AppShimmer(width: double.infinity, height: 250, borderRadius: 20),
+        const SizedBox(height: 24),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 2,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+          childAspectRatio: 1.5,
+          children: List.generate(4, (index) => const AppShimmer(width: double.infinity, height: 80, borderRadius: 16)),
+        ),
+        const SizedBox(height: 24),
+        const AppShimmer(width: double.infinity, height: 120, borderRadius: 20),
+        const SizedBox(height: 24),
+        const AppShimmer(width: 150, height: 24),
         const SizedBox(height: 16),
         SizedBox(
           height: 100,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: achievements.length,
-            itemBuilder: (context, index) {
-              final achievement = achievements[index];
-              return Container(
-                width: 90,
-                margin: const EdgeInsets.only(right: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.backgroundCard,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.borderDefault),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      achievement['icon'] as IconData,
-                      color: achievement['color'] as Color,
-                      size: 32,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      achievement['title'] as String,
-                      style: const TextStyle(
-                        color: AppColors.textPrimary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
+            itemCount: 4,
+            itemBuilder: (context, index) => const Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: AppShimmer(width: 90, height: 100, borderRadius: 16),
+            ),
           ),
         ),
       ],
