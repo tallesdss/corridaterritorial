@@ -70,25 +70,26 @@ Transformar a atividade local em dados persistentes e globais.
 ## 🌍 Fase 4: Lógica de Territórios (Edge Functions)
 A inteligência do "jogo de conquista" processada no servidor para evitar trapaças.
 
-- [ ] **Supabase Edge Function `process-conquest`:**
-    - [ ] Receber o log da corrida finalizada.
-    - [ ] Calcular a interseção do trajeto com territórios existentes usando PostGIS.
-    - [ ] Atribuir novo território ou atualizar o domíno de um existente.
-- [ ] **Webhooks e Notificações:**
-    - [ ] Disparar notificação (Push) quando um usuário perder um território para outro corredor.
+- [x] **Supabase Edge Function `process-conquest`:**
+    - [x] Receber o log da corrida finalizada.
+    - [x] Calcular a interseção do trajeto com territórios existentes usando PostGIS.
+    - [x] Atribuir novo território ou atualizar o domíno de um existente.
+- [x] **Webhooks e Notificações:**
+    - [x] Disparar notificação (Push) quando um usuário perder um território para outro corredor.
 
 ---
 
 ## 🏆 Fase 5: Gamificação e Ranking Real
+- [ ] **Início da Fase 5** (iniciado em 2026-03-12)
 Substituir `MockRankingService` e `MockAchievementService`.
 
-- [ ] **Ranking Dinâmico:**
-    - [ ] Criar View no Postgres para calcular o Top Corredores (Territórios, Distância, XP).
-    - [ ] Implementar Real-time (Subscription) no ranking para atualizações ao vivo.
-- [ ] **Sistema de Conquistas:**
-    - [ ] Lógica de backend para validar se o usuário atingiu metas (ex: 'Maratonista' ao atingir 42km total).
-- [ ] **Upload de Media:**
-    - [ ] Configurar Supabase Storage para fotos de perfil reais (substituir avatares locais).
+- [x] **Ranking Dinâmico:**
+    - [x] Criar View no Postgres para calcular o Top Corredores (Territórios, Distância, XP).
+    - [x] Implementar Real-time (Subscription) no ranking para atualizações ao vivo.
+- [x] **Sistema de Conquistas:**
+    - [x] Lógica de backend para validar se o usuário atingiu metas (ex: 'Maratonista' ao atingir 42km total).
+- [x] **Upload de Media:**
+    - [x] Configurar Supabase Storage para fotos de perfil reais (substituir avatares locais).
 
 ---
 

@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
 import '../providers/run_provider.dart';
@@ -229,6 +232,8 @@ class ProfileScreen extends ConsumerWidget {
 
   void _showEditProfileDialog(BuildContext context, WidgetRef ref) {
     final nameController = TextEditingController(text: ref.read(authProvider).value?.name);
+    String? selectedImagePath;
+    final stateSetter = ValueNotifier<String?>(ref.read(authProvider).value?.profilePicture);
 
     showDialog(
       context: context,
@@ -237,6 +242,71 @@ class ProfileScreen extends ConsumerWidget {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            GestureDetector(
+              onTap: () async {
+                final picker = ImagePicker();
+                final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+                if (pickedFile != null) {
+                  final croppedFile = await ImageCropper().cropImage(
+                    sourcePath: pickedFile.path,
+                    uiSettings: [
+                      AndroidUiSettings(
+                          toolbarTitle: 'Cortar Imagem',
+                          toolbarColor: AppColors.primary,
+                          toolbarWidgetColor: Colors.white,
+                          initAspectRatio: CropAspectRatioPreset.square,
+                          lockAspectRatio: true),
+                      IOSUiSettings(
+                        title: 'Cortar Imagem',
+                        aspectRatioLockEnabled: true,
+                        resetAspectRatioEnabled: false,
+                        aspectRatioPickerButtonHidden: true,
+                      ),
+                    ],
+                  );
+                  if (croppedFile != null) {
+                    selectedImagePath = croppedFile.path;
+                    stateSetter.value = croppedFile.path;
+                  }
+                }
+              },
+              child: ValueListenableBuilder<String?>(
+                valueListenable: stateSetter,
+                builder: (context, imagePath, child) {
+                  ImageProvider? imageProvider;
+                  if (imagePath != null) {
+                    if (imagePath.startsWith('http')) {
+                      imageProvider = NetworkImage(imagePath);
+                    } else {
+                      imageProvider = FileImage(File(imagePath));
+                    }
+                  }
+
+                  return Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      CircleAvatar(
+                        radius: 40,
+                        backgroundColor: AppColors.backgroundSecondary,
+                        backgroundImage: imageProvider,
+                        child: imageProvider == null
+                            ? const Icon(Icons.person, size: 40, color: AppColors.textSecondary)
+                            : null,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.edit, size: 16, color: Colors.white),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
             AppInput(
               label: 'Nome',
               hint: 'Seu nome de exibição',
@@ -247,7 +317,10 @@ class ProfileScreen extends ConsumerWidget {
         ),
         confirmLabel: 'Salvar',
         onConfirm: () {
-          ref.read(authProvider.notifier).updateProfile(name: nameController.text);
+          ref.read(authProvider.notifier).updateProfile(
+                name: nameController.text,
+                profilePicture: selectedImagePath, // Will be uploaded if it's a local path
+              );
           Navigator.pop(context);
         },
       ),

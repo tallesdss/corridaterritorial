@@ -10,60 +10,73 @@ class AchievementsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final achievements = ref.watch(achievementsProvider);
-    final unlockedCount = achievements.where((a) => a.isUnlocked).length;
+    final achievementsAsync = ref.watch(achievementsFutureProvider);
+    
+    return achievementsAsync.when(
+      data: (achievements) {
+        final unlockedCount = achievements.where((a) => a.isUnlocked).length;
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundPrimary,
-      appBar: AppBar(
-        title: const Text(
-          'Conquistas',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: AppColors.backgroundPrimary,
-        elevation: 0,
-        foregroundColor: AppColors.textPrimary,
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildSummaryCard(unlockedCount, achievements.length),
-                  const SizedBox(height: 32),
-                  Text(
-                    'Minha Galeria',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          color: AppColors.textPrimary,
-                          fontWeight: FontWeight.bold,
-                        ),
+        return Scaffold(
+          backgroundColor: AppColors.backgroundPrimary,
+          appBar: AppBar(
+            title: const Text(
+              'Conquistas',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            backgroundColor: AppColors.backgroundPrimary,
+            elevation: 0,
+            foregroundColor: AppColors.textPrimary,
+          ),
+          body: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildSummaryCard(unlockedCount, achievements.length),
+                      const SizedBox(height: 32),
+                      Text(
+                        'Minha Galeria',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                sliver: SliverGrid(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                    childAspectRatio: 0.85,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return _buildAchievementCard(context, achievements[index]);
+                    },
+                    childCount: achievements.length,
+                  ),
+                ),
+              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 32)),
+            ],
           ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            sliver: SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 0.85,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return _buildAchievementCard(context, achievements[index]);
-                },
-                childCount: achievements.length,
-              ),
-            ),
-          ),
-          const SliverToBoxAdapter(child: SizedBox(height: 32)),
-        ],
+        );
+      },
+      loading: () => const Scaffold(
+        backgroundColor: AppColors.backgroundPrimary,
+        body: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+      ),
+      error: (err, stack) => Scaffold(
+        backgroundColor: AppColors.backgroundPrimary,
+        body: Center(child: Text('Erro ao carregar conquistas: $err', style: const TextStyle(color: AppColors.error))),
       ),
     );
   }

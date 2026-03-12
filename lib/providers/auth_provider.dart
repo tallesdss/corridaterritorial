@@ -54,9 +54,14 @@ class AuthNotifier extends Notifier<AsyncValue<UserModel?>> {
   }
 
   Future<void> updateProfile({String? name, String? profilePicture}) async {
-    // Nota: Na Fase 2 isso atualizará a tabela 'profiles' no Supabase
     final currentUser = state.value;
     if (currentUser != null) {
+      // Atualiza via serviço (Postgres)
+      await ref.read(authServiceProvider).updateProfile(
+        name: name,
+        profilePicture: profilePicture,
+      );
+      // Atualiza logalmente enquanto o stream nao reemite
       state = AsyncValue.data(currentUser.copyWith(
         name: name,
         profilePicture: profilePicture,

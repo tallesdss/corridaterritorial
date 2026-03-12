@@ -7,4 +7,5 @@ abstract class AuthService {
   Future<void> resetPassword(String email);
   Stream<UserModel?> get onAuthStateChanged;
   UserModel? get currentUser;
+  Future<void> updateProfile({String? name, String? profilePicture});
 }

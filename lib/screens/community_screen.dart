@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/ranked_user_model.dart';
-import '../services/mock_ranking_service.dart';
+import '../services/ranking_service.dart';
 import '../theme/app_colors.dart';
 
 enum RankingFilter { territory, distance, achievements }
@@ -17,8 +17,18 @@ final rankingFilterProvider = NotifierProvider<RankingFilterNotifier, RankingFil
 
 final rankingFutureProvider = FutureProvider<List<RankedUserModel>>((ref) async {
   final filter = ref.watch(rankingFilterProvider);
-  final service = ref.watch(mockRankingServiceProvider);
+  final service = ref.watch(rankingServiceProvider);
   
+  // Observa mudanças nas tabelas usando a extensão criada no serviço
+  final sub = service.watchProfiles().listen((_) {
+    // Invalida o provider toda vez que ocorrer uma mudança
+    ref.invalidateSelf();
+  });
+  
+  ref.onDispose(() {
+    sub.cancel();
+  });
+
   switch (filter) {
     case RankingFilter.territory:
       return service.getRankingByTerritory();

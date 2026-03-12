@@ -1,7 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/achievement_model.dart';
-import '../services/mock_achievement_service.dart';
+import '../services/achievement_service.dart';
 
-final achievementsProvider = Provider<List<AchievementModel>>((ref) {
-  return MockAchievementService.getAchievements();
+final achievementsFutureProvider = FutureProvider<List<AchievementModel>>((ref) async {
+  final service = ref.watch(achievementServiceProvider);
+  return await service.getAchievements();
 });
