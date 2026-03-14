@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_colors.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class RunSummaryScreen extends StatelessWidget {
   const RunSummaryScreen({super.key});
@@ -25,17 +26,23 @@ class RunSummaryScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Mock Map View
+            // Map View
             Container(
               height: 200,
               width: double.infinity,
+              clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
                 color: AppColors.backgroundSecondary,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.borderDefault),
               ),
-              child: const Center(
-                child: Icon(Icons.map, size: 64, color: AppColors.textMuted),
+              child: MapWidget(
+                key: const ValueKey("summaryMap"),
+                cameraOptions: CameraOptions(
+                  center: Point(coordinates: Position(-46.6333, -23.5505)),
+                  zoom: 13.0,
+                ),
+                styleUri: MapboxStyles.DARK,
               ),
             ),
             const SizedBox(height: 24),

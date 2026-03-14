@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../theme/app_colors.dart';
 import '../widgets/territory_details_sheet.dart';
 import '../models/territory_model.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class RunningScreen extends StatefulWidget {
   const RunningScreen({super.key});
@@ -20,24 +21,17 @@ class _RunningScreenState extends State<RunningScreen> {
       backgroundColor: AppColors.backgroundPrimary,
       body: Stack(
         children: [
-          // Mock Map Layer
-          Container(
-            color: AppColors.backgroundSecondary,
-            width: double.infinity,
-            height: double.infinity,
-            child: const Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.map, size: 100, color: AppColors.textMuted),
-                  SizedBox(height: 16),
-                  Text(
-                    'Mock de Mapa em Tempo Real',
-                    style: TextStyle(color: AppColors.textMuted, fontSize: 16),
-                  ),
-                ],
-              ),
+          // Map Layer
+          MapWidget(
+            key: const ValueKey("mapWidget"),
+            cameraOptions: CameraOptions(
+              center: Point(coordinates: Position(-46.6333, -23.5505)), // São Paulo
+              zoom: 15.0,
             ),
+            styleUri: MapboxStyles.DARK,
+            onMapCreated: (controller) {
+              // Aqui seriam adicionadas as lógicas de trajeto em tempo real
+            },
           ),
           
           // Back Button

@@ -43,3 +43,51 @@ Caso precise limpar os dados ou simular para outro usuário, utilize o script SQ
 INSERT INTO public.runs (user_id, distance, duration, pace, calories, path_geom)
 VALUES ('USER_ID', 5.0, 1500, 5.0, 400, ST_GeomFromText('LINESTRING(...)', 4326));
 ```
+
+---
+
+## Investigação: Por que o Mapa Mapbox não está aparecendo?
+
+Após análise do código-fonte e da estrutura do projeto, foram identificados os seguintes motivos para a ausência do mapa real:
+
+### 1. Implementação Visual não Concluída (UI Mocks)
+Embora o planejamento (`migracaoparabackend.md`) indique a Fase 3 como concluída, os componentes de interface ainda utilizam placeholders.
+- **`RunningScreen`:** Utiliza um `Container` fixo com `Icon(Icons.map)` e o texto "Mock de Mapa em Tempo Real".
+- **`RunSummaryScreen`:** Utiliza um layout similar de placeholder para o trajeto da corrida.
+
+### 2. Ausência de Inicialização do SDK
+O SDK do Mapbox exige a definição do Token de Acesso antes da renderização.
+- Não foi encontrada a chamada `MapboxOptions.setAccessToken` no `main.dart` ou em controllers de inicialização.
+
+### 3. Falta de Permissões Nativa
+O arquivo `android/app/src/main/AndroidManifest.xml` não possui as permissões necessárias de GPS (`ACCESS_FINE_LOCATION` e `ACCESS_COARSE_LOCATION`), o que impede o mapa de carregar a localização do usuário mesmo que o widget fosse instanciado.
+
+### 4. Configuração Gradle Pendente
+Embora as chaves existam no `.env` e `local.properties`, o plugin `mapbox_maps_flutter` precisa ser corretamente instanciado no código Dart para substituir os `Container` mocks atuais.
+
+**Conclusão:** O mapa não aparece simplesmente porque **ainda não foi injetado nos widgets de tela**. O projeto está preparado em nível de dependências e chaves, mas a "troca" do mock pelo `MapWidget` real ainda não foi executada na camada de visualização.
+
+---
+
+## Ações Realizadas para Correção (13/03/2026)
+
+Para resolver a ausência do mapa e integrar o SDK real, foram executadas as seguintes correções:
+
+### 1. Configuração de Permissões Nativas
+- Adicionadas as permissões de localização no `AndroidManifest.xml`:
+    - `ACCESS_FINE_LOCATION`
+    - `ACCESS_COARSE_LOCATION`
+    - `INTERNET`
+
+### 2. Inicialização do SDK Mapbox
+- Atualizado o arquivo `lib/main.dart` para realizar a importação do Mapbox e definir o token de acesso globalmente através de `MapboxOptions.setAccessToken` usando a chave `MAPBOX_PUBLIC_TOKEN` do arquivo `.env`.
+
+### 3. Substituição de Mocks por Widgets Reais
+- **`RunningScreen`:** Substituído o `Container` de placeholder pelo widget funcional `MapWidget`. Configurado com o estilo `DARK` e posição inicial em São Paulo.
+- **`RunSummaryScreen`:** Substituído o ícone estático pelo widget `MapWidget` para exibição do trajeto da corrida no resumo.
+
+### 5. Correção de Tipagem (Bug Fix)
+- Corrigida a passagem de parâmetros para o `CameraOptions`. Inicialmente estava sendo passado um `Map` via `.toJson()`, mas o SDK `mapbox_maps_flutter` v2+ exige o objeto `Point` diretamente no campo `center`.
+
+### 4. Sincronização de Documentação
+- Atualizado o status implícito do projeto para refletir que a infraestrutura de visualização de mapa agora está conectada ao SDK real, permitindo iniciar o desenvolvimento das camadas de territórios e trajetos sobre o mapa vivo.
