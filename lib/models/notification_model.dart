@@ -32,4 +32,25 @@ class NotificationModel {
       relatedId: relatedId,
     );
   }
+  factory NotificationModel.fromJson(Map<String, dynamic> json) {
+    return NotificationModel(
+      id: json['id'],
+      title: json['title'],
+      message: json['message'],
+      timestamp: DateTime.parse(json['created_at']),
+      type: NotificationType.values.byName(json['type']),
+      isRead: json['is_read'] ?? false,
+      relatedId: json['related_id'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'message': message,
+      'type': type.name,
+      'is_read': isRead,
+      'related_id': relatedId,
+    };
+  }
 }

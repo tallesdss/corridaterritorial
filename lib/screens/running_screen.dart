@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../theme/app_colors.dart';
 import '../widgets/territory_details_sheet.dart';
-import '../services/mock_territory_service.dart';
+import '../models/territory_model.dart';
 
 class RunningScreen extends StatefulWidget {
   const RunningScreen({super.key});
@@ -143,7 +143,7 @@ class _RunningScreenState extends State<RunningScreen> {
               onPressed: () {
                 TerritoryDetailsSheet.show(
                   context, 
-                  MockTerritoryService.getMockTerritory(),
+                  TerritoryModel.example(),
                 );
               },
               backgroundColor: AppColors.info,

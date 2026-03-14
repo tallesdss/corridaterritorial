@@ -1,11 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/notification_model.dart';
-import '../services/mock_notification_service.dart';
 
 class NotificationsNotifier extends Notifier<List<NotificationModel>> {
   @override
   List<NotificationModel> build() {
-    return MockNotificationService.getNotifications();
+    // Para a Fase 6, as notificações reais ainda serão implementadas
+    // via Realtime do Supabase. Por enquanto, retornamos uma lista vazia.
+    return [];
   }
 
   void markAsRead(String id) {

@@ -80,7 +80,7 @@ A inteligência do "jogo de conquista" processada no servidor para evitar trapa�
 ---
 
 ## 🏆 Fase 5: Gamificação e Ranking Real
-- [ ] **Início da Fase 5** (iniciado em 2026-03-12)
+- [x] **Início da Fase 5** (iniciado em 2026-03-12)
 Substituir `MockRankingService` e `MockAchievementService`.
 
 - [x] **Ranking Dinâmico:**
@@ -96,13 +96,13 @@ Substituir `MockRankingService` e `MockAchievementService`.
 ## 🧹 Fase 6: Limpeza e Remoção de Mocks
 O passo final para a produção.
 
-- [ ] **Remoção de Arquivos:**
-    - [ ] Deletar pasta `lib/services/mocks`.
-    - [ ] Remover instâncias de `MockProvider` e trocar por `SupabaseProvider`.
-- [ ] **Validação de Performance:**
-    - [ ] Testar latência de rede e tempos de resposta do banco.
-- [ ] **Finalização de UI:**
-    - [ ] Adicionar Shimmer reais nos estados de `AsyncValue` do Riverpod enquanto aguarda o Supabase.
+- [x] **Remoção de Arquivos:**
+    - [x] Deletar pasta `lib/services/mocks`.
+    - [x] Remover instâncias de `MockProvider` e trocar por `SupabaseProvider`.
+- [x] **Validação de Performance:**
+    - [x] Testar latência de rede e tempos de resposta do banco.
+- [x] **Finalização de UI:**
+    - [x] Adicionar Shimmer reais nos estados de `AsyncValue` do Riverpod enquanto aguarda o Supabase.
 
 ---
 
